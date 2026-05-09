@@ -45,7 +45,13 @@ class CategoryRepository implements CategoryInterface
 
     public function getCategoryBySlug($slug)
     {
-        return Category::where('slug', $slug)->with('ProductDetails')->first();
+        return Category::where('slug', $slug)
+            ->with([
+                'ProductDetails' => function ($query) {
+                    $query->where('status', 1)->with(['colorSize', 'collection']);
+                }
+            ])
+            ->first();
     }
 
     public function deleteCategory($categoryId)
@@ -63,11 +69,29 @@ class CategoryRepository implements CategoryInterface
         $category->name = $collection['name'];
         $category->parent = $collection['parent'];
         $category->description = $collection['description'];
+        $category->icon_alt = $collection['icon_alt'];
+        $category->sketch_icon_alt = $collection['sketch_icon_alt'];
+        $category->image_alt = $collection['image_alt'];
+        $category->banner_image_alt = $collection['banner_image_alt'];
+        $category->home_image_alt = $collection['home_image_alt'];
+        $category->meta_title = $collection['meta_title'];
+        $category->meta_description = $collection['meta_description'];
+        $category->schema = $collection['schema'];
+        $category->footer_content = $collection['footer_content'] ?? null;
+        $category->faq = $collection['faq'] ?? null;
 
         // generate slug
-        $slug = Str::slug($collection['name'], '-');
-        $slugExistCount = Category::where('slug', $slug)->count();
-        if ($slugExistCount > 0) $slug = $slug . '-' . ($slugExistCount + 1);
+        // $slug = Str::slug($collection['name'], '-');
+        // $slugExistCount = Category::where('slug', $slug)->count();
+        // if ($slugExistCount > 0) $slug = $slug . '-' . ($slugExistCount + 1);
+        // $category->slug = $slug;
+
+        $baseSlug = Str::slug($collection['name'], '-');
+        $slug = $baseSlug;
+        $counter = 1;
+        while (Category::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter++;
+        }
         $category->slug = $slug;
 
         // icon image
@@ -98,6 +122,13 @@ class CategoryRepository implements CategoryInterface
         $uploadedImage = $bannerImageName;
         $category->banner_image = $upload_path . $uploadedImage;
 
+        // home image
+        $homeImage = $collection['home_image'];
+        $homeImageName = time() . "." . mt_rand() . "." . $homeImage->getClientOriginalName();
+        $homeImage->move($upload_path, $homeImageName);
+        $uploadedImage = $homeImageName;
+        $category->home_image = $upload_path . $uploadedImage;
+
         $category->save();
 
         return $category;
@@ -111,13 +142,42 @@ class CategoryRepository implements CategoryInterface
 
         $category->name = $collection['name'];
         //$category->parent = $collection['parent'];
+        $category->slug = $collection['slug'];
         $category->description = $collection['description'];
+        $category->icon_alt = $collection['icon_alt'];
+        $category->sketch_icon_alt = $collection['sketch_icon_alt'];
+        $category->image_alt = $collection['image_alt'];
+        $category->banner_image_alt = $collection['banner_image_alt'];
+        $category->home_image_alt = $collection['home_image_alt'];
+        $category->meta_title = $collection['meta_title'];
+        $category->meta_description = $collection['meta_description'];
+        $category->schema = $collection['schema'];
+        $category->footer_content = $collection['footer_content'];
+        $category->faq = $collection['faq'] ?? null;
 
         // generate slug
-        $slug = Str::slug($collection['name'], '-');
-        $slugExistCount = Category::where('slug', $slug)->count();
-        if ($slugExistCount > 0) $slug = $slug . '-' . ($slugExistCount + 1);
-        $category->slug = $slug;
+        // $slug = Str::slug($collection['name'], '-');
+        // $slugExistCount = Category::where('slug', $slug)->count();
+        // if ($slugExistCount > 0) $slug = $slug . '-' . ($slugExistCount + 1);
+        // $category->slug = $slug;
+
+        // regenerate slug only if name changed
+        if ($category->name !== $collection['name']) {
+
+            $baseSlug = Str::slug($collection['name'], '-');
+            $slug = $baseSlug;
+            $counter = 1;
+
+            while (
+                Category::where('slug', $slug)
+                    ->where('id', '!=', $categoryId)
+                    ->exists()
+            ) {
+                $slug = $baseSlug . '-' . $counter++;
+            }
+
+            $category->slug = $slug;
+        }
 
         if (isset($newDetails['icon_path'])) {
             // dd('here');
@@ -153,6 +213,15 @@ class CategoryRepository implements CategoryInterface
             $bannerImage->move($upload_path, $bannerImageName);
             $uploadedImage = $bannerImageName;
             $category->banner_image = $upload_path . $uploadedImage;
+        }
+
+        if (isset($newDetails['home_image'])) {
+            // dd('here');
+            $homeImage = $collection['home_image'];
+            $homeImageName = time() . "." . mt_rand() . "." . $homeImage->getClientOriginalName();
+            $homeImage->move($upload_path, $homeImageName);
+            $uploadedImage = $homeImageName;
+            $category->home_image = $upload_path . $uploadedImage;
         }
         // dd('outside');
 

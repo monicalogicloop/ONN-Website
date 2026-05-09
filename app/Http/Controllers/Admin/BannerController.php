@@ -26,6 +26,7 @@ class BannerController extends Controller
     {
         $request->validate([
             "image" => "required|mimes:jpg,jpeg,png,svg,gif|max:10000000",
+            "link"  => "nullable|url",
         ]);
 
         $params = $request->except('_token');
@@ -48,6 +49,7 @@ class BannerController extends Controller
     {
         $request->validate([
             "image" => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
+            "link"  => "nullable|url",
         ]);
 
         $params = $request->except('_token');

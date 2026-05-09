@@ -120,8 +120,9 @@
         padding-bottom: calc((4/3)*100%);
         position: relative;
         border:  1px solid #ccc;
-        max-width: 80px;
-        min-width: 80px;
+        margin:0px;
+        /* max-width: 80px;
+        min-width: 80px; */
     }
     .img_thumb img {
         width: 100%;
@@ -250,6 +251,11 @@
                             <input type="text" name="name" placeholder="Add Product Title" class="form-control" value="{{$data->name}}">
                             @error('name') <p class="small text-danger">{{ $message }}</p> @enderror
                         </div>
+                        <div class="form-group mb-3">
+                            <label class="label-control">Product Slug <span class="text-danger">*</span></label>
+                            <input type="text" name="slug" placeholder="Add Product Slug" class="form-control" value="{{$data->slug}}">
+                            @error('slug') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
                     </div>
                 </div>
 
@@ -327,6 +333,15 @@
                                         @error('meta_keyword') <p class="small text-danger">{{ $message }}</p> @enderror
                                     </div>
                                 </div>
+                                <div class="row mb-2 align-items-center">
+                                    <div class="col-3">
+                                        <label for="inputprice6" class="col-form-label">Schema</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input type="text" id="inputprice7" class="form-control" aria-describedby="priceHelpInline" name="schema" value="{{$data->schema}}">
+                                        @error('schema') <p class="small text-danger">{{ $message }}</p> @enderror
+                                    </div>
+                                </div>
                             </content>
                         </div>
                         <div class="admin__content">
@@ -374,6 +389,13 @@
                             <label for="thumbnail"><img id="output" src="{{ asset($data->image) }}"/></label>
                             @error('image') <p class="small text-danger">{{ $message }}</p> @enderror
                         </div>
+                        <div>
+                            <label class="form-label">Image Alt Text</label>
+                            <input type="text" name="image_alt" placeholder="" class="form-control" value="{{ $data->image_alt }}">
+                            @error('image_alt')
+                            <p class="small text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
                         <input type="file" id="thumbnail" accept="image/*" name="image" onchange="loadFile(event)" class="d-none">
                         <small>Image Size: 870px X 1160px</small>
                         <script>
@@ -404,6 +426,13 @@
                                 @endif
                             </label>
                             @error('size_chart_image') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <label class="form-label">Size Chart Image Alt Text</label>
+                            <input type="text" name="size_chart_image_alt" placeholder="" class="form-control" value="{{ $data->size_chart_image_alt }}">
+                            @error('size_chart_image_alt')
+                            <p class="small text-danger">{{ $message }}</p>
+                            @enderror
                         </div>
                         <input type="file" id="size_chart_image" accept="image/*" name="size_chart_image" onchange="loadFile2(event)" class="d-none">
                         <small>Image Size: less than 200kb</small>
@@ -666,9 +695,30 @@
                                 @php
                                     $productVariationImages = \App\Models\ProductImage::where('product_id', $id)->where('color_id', $productColorGroupVal->color)->get();
 
+                                    $altText = $productImgVal->image_alt ?? '';
+
                                     $prodImagesDIsplay = '';
                                     foreach($productVariationImages as $productImgKey => $productImgVal) {
-                                        $prodImagesDIsplay .= '<div class="col-sm-auto" id="img__holder_'.$productColorKey.'_'.$productImgKey.'"><figure class="img_thumb"><img src='.asset($productImgVal->image).'><a href="javascript: void(0)" class="remove_image" onclick="deleteImage('.$productImgVal->id.', '.$productColorKey.', '.$productImgKey.')"><i class="fi fi-br-trash"></i></a></figure></div>';
+                                        $altText = $productImgVal->image_alt ?? '';
+
+                                        $prodImagesDIsplay .= '
+                                        <div class="col-sm-auto" id="img__holder_'.$productColorKey.'_'.$productImgKey.'">
+                                            <figure class="img_thumb position-relative" style="">
+                                                <img src="'.asset($productImgVal->image).'" alt="'.$altText.'">
+                                                
+                                                <a href="javascript:void(0)" 
+                                                class="remove_image"
+                                                onclick="deleteImage('.$productImgVal->id.', '.$productColorKey.', '.$productImgKey.')">
+                                                <i class="fi fi-br-trash"></i>
+                                                </a>
+                                            </figure>
+
+                                            <input type="text" 
+                                                class="form-control mt-2 mb-2" 
+                                                placeholder="Image ALT text"
+                                                value="'.$altText.'"
+                                                onchange="updateImageAlt('.$productImgVal->id.', this.value)">
+                                        </div>';
                                     }
                                 @endphp
                                 {!!$prodImagesDIsplay!!}
@@ -1162,5 +1212,25 @@
 
         // bulk select all checkbox
         // $('.bulkSelectAll').on();
+    </script>
+
+    <script>
+        function updateImageAlt(imageId, altText) {
+            $.ajax({
+                url: '{{ route("admin.product.variation.image.alt.update") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: imageId,
+                    image_alt: altText
+                },
+                success: function(res) {
+                    toastFire('success', 'Alt updated');
+                },
+                error: function() {
+                    toastFire('danger', 'Update failed');
+                }
+            });
+        }
     </script>
 @endsection

@@ -126,11 +126,18 @@ class ProductRepository implements ProductInterface
             $newEntry->meta_title = $collectedData['meta_title'];
             $newEntry->meta_desc = $collectedData['meta_desc'];
             $newEntry->meta_keyword = $collectedData['meta_keyword'];
+            $newEntry->schema = $collectedData['schema'];
             $newEntry->style_no = $collectedData['style_no'];
             $newEntry->pack = $collectedData['pack'];
+            $newEntry->image_alt = $collectedData['image_alt'];
+            $newEntry->size_chart_image_alt = $collectedData['size_chart_image_alt'];
 
             // slug generate
-            $slug = \Str::slug($collectedData['name'].'-'.$collectedData['style_no'], '-');
+            if (!empty($collectedData['slug'])) {
+                $slug = \Str::slug($collectedData['slug'], '-');
+            } else {
+                $slug = \Str::slug($collectedData['name'] . '-' . $collectedData['style_no'], '-');
+            }
             $slugExistCount = Product::where('slug', $slug)->count();
             if ($slugExistCount > 0) $slug = $slug . '-' . ($slugExistCount + 1);
             $newEntry->slug = $slug;
@@ -184,8 +191,9 @@ class ProductRepository implements ProductInterface
             DB::commit();
             return $newEntry;
         } catch (\Throwable $th) {
-            throw $th;
+            
             DB::rollback();
+            throw $th;
         }
     }
 
@@ -206,9 +214,14 @@ class ProductRepository implements ProductInterface
             if (!empty($collectedData['collection_id'])) $updatedEntry->collection_id = $collectedData['collection_id'];
 
             // slug generate
-            if ($updatedEntry->name != $collectedData['name']) {
-                $slug = \Str::slug($collectedData['name'].'-'.$collectedData['style_no'], '-');
-                $slugExistCount = Product::where('slug', $slug)->count();
+            if (!empty($collectedData['slug']) && $updatedEntry->slug != $collectedData['slug']) {
+                $slug = \Str::slug($collectedData['slug'], '-');
+                $slugExistCount = Product::where('slug', $slug)->where('id', '!=', $updatedEntry->id)->count();
+                if ($slugExistCount > 0) $slug = $slug . '-' . ($slugExistCount + 1);
+                $updatedEntry->slug = $slug;
+            } elseif ($updatedEntry->name != $collectedData['name'] && empty($collectedData['slug'])) {
+                $slug = \Str::slug($collectedData['name'] . '-' . $collectedData['style_no'], '-');
+                $slugExistCount = Product::where('slug', $slug)->where('id', '!=', $updatedEntry->id)->count();
                 if ($slugExistCount > 0) $slug = $slug . '-' . ($slugExistCount + 1);
                 $updatedEntry->slug = $slug;
             }
@@ -222,8 +235,11 @@ class ProductRepository implements ProductInterface
             $updatedEntry->meta_title = $collectedData['meta_title'];
             $updatedEntry->meta_desc = $collectedData['meta_desc'];
             $updatedEntry->meta_keyword = $collectedData['meta_keyword'];
+            $updatedEntry->schema = $collectedData['schema'];
             $updatedEntry->style_no = $collectedData['style_no'];
             $updatedEntry->pack = $collectedData['pack'];
+            $updatedEntry->image_alt = $collectedData['image_alt'];
+            $updatedEntry->size_chart_image_alt = $collectedData['size_chart_image_alt'];
 
             if (isset($newDetails['image'])) {
                 // delete old image

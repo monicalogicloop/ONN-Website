@@ -37,11 +37,23 @@ class CategoryController extends Controller
         $request->validate([
             "name" => "required|regex:/^[\pL\s\-]+$/u|max:255",
             "parent" => "required|alpha|max:255",
+            "slug" => "nullable|string",
             "description" => "nullable|string",
             "icon_path" => "required|mimes:jpg,jpeg,png,svg,gif|max:10000000",
             "sketch_icon" => "required|mimes:jpg,jpeg,png,svg,gif|max:10000000",
             "image_path" => "required|mimes:jpg,jpeg,png,svg,gif|max:10000000",
-            "banner_image" => "required|mimes:jpg,jpeg,png,svg,gif|max:10000000"
+            "banner_image" => "required|mimes:jpg,jpeg,png,svg,gif|max:10000000",
+            "home_image" => "required|mimes:jpg,jpeg,png,svg,gif|max:10000000",
+            "icon_alt" => "nullable|string",
+            "sketch_icon_alt" => "nullable|string",
+            "image_alt" => "nullable|string",
+            "banner_image_alt" => "nullable|string",
+            "home_image_alt" => "nullable|string",
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'schema' => 'nullable|string',
+            'footer_content' => 'nullable|string',
+            'faq' => 'nullable|string',
         ]);
 
         $params = $request->except('_token');
@@ -68,11 +80,23 @@ class CategoryController extends Controller
         $request->validate([
             "name" => "required|regex:/^[\pL\s\-]+$/u|max:255",
             // "parent" => "required|alpha|max:255",
+            "slug" => "nullable|string",
             "description" => "nullable|string",
             "icon_path" => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
             "sketch_icon" => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
             "image_path" => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
-            "banner_image" => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000"
+            "banner_image" => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
+            "home_image" => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
+            "icon_alt" => "nullable|string",
+            "sketch_icon_alt" => "nullable|string",
+            "image_alt" => "nullable|string",
+            "banner_image_alt" => "nullable|string",
+            "home_image_alt" => "nullable|string",
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'schema' => 'nullable|string',
+            'footer_content' => 'nullable|string',
+            'faq' => 'nullable|string',
         ]);
 
         $params = $request->except('_token');

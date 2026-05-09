@@ -7,6 +7,16 @@ App\Models\Product::where('id', $data->id)->increment('view_count', 1, ['last_vi
 
 @section('page', 'Product detail')
 
+@section('meta')
+    <title>{{ $data->meta_title ?? $data->name }}</title>
+    <meta name="description" content="{{ $data->meta_desc ?? '' }}">
+    @if($data->schema)
+        <script type="application/ld+json">
+            {!! $data->schema !!}
+        </script>
+    @endif
+@endsection
+
 @section('content')
 <style>
 .product-details__content__holder .product__enquire form button {
@@ -168,18 +178,18 @@ App\Models\Product::where('id', $data->id)->increment('view_count', 1, ['last_vi
 						@if($color)
                             @if(count($lazyImages) == 0)
                                 <div class="product-details__gallery__thumb-single swiper-slide">
-                                    <img src="{{ asset($data->image) }}" />
+                                    <img src="{{ asset($data->image) }}" alt="{{ $data->image_alt }}" />
                                 </div>
                             @else
                                 @foreach($lazyImages as $singleImage)
                                     <div class="product-details__gallery__thumb-single swiper-slide">
-                                        <img src="{{ asset($singleImage->image) }}" />
+                                        <img src="{{ asset($singleImage->image) }}" alt="{{ $singleImage->image_alt ?? $data->image_alt }}" />
                                     </div>
                                 @endforeach
                             @endif
                         @else
                         <div class="product-details__gallery__thumb-single swiper-slide">
-                            <img src="{{ asset($data->image) }}" />
+                            <img src="{{ asset($data->image) }}" alt="{{ $data->image_alt }}" />
                         </div>
 						@endif
 
@@ -197,25 +207,25 @@ App\Models\Product::where('id', $data->id)->increment('view_count', 1, ['last_vi
                         @if($color)
                             @if(count($lazyImages) == 0)
                                 <div class="product-details__gallery__slider-single swiper-slide">
-                                    <img src="{{ asset($data->image) }}" />
+                                    <img src="{{ asset($data->image) }}" alt="{{ $data->image_alt }}"/>
                                 </div>
                             @else
                                 @foreach($lazyImages as $singleImage)
                                     <div class="product-details__gallery__slider-single swiper-slide">
-                                        <img src="{{ asset($singleImage->image) }}" />
+                                        <img src="{{ asset($singleImage->image) }}" alt="{{ $singleImage->image_alt ?? $data->image_alt }}"/>
                                     </div>
                                 @endforeach
                             @endif
                         @else
                         <div class="product-details__gallery__slider-single swiper-slide">
-                            <img src="{{ asset($data->image) }}" />
+                            <img src="{{ asset($data->image) }}" alt="{{ $data->image_alt }}"/>
                         </div>
 						@endif
 
                         @if($color)
                             @foreach($lazyImages as $singleImage)
                                 <div class="product-details__gallery__slider-single swiper-slide">
-                                    <img src="{{ asset($singleImage->image) }}" />
+                                    <img src="{{ asset($singleImage->image) }}" alt="{{ $singleImage->image_alt ?? $data->image_alt }}"/>
                                 </div>
                             @endforeach
 						@endif
@@ -622,9 +632,9 @@ App\Models\Product::where('id', $data->id)->increment('view_count', 1, ['last_vi
                         $data->size_chart_image == NULL || 
                         !file_exists($data->size_chart_image)
                     )
-                        <img src="{{asset('img/placeholder-image.jpg')}}" class="img-fluid">
+                        <img src="{{asset('img/placeholder-image.jpg')}}" class="img-fluid" alt="{{$data->size_chart_image_alt}}">
                     @else
-                        <img src="{{asset($data->size_chart_image)}}" class="img-fluid">
+                        <img src="{{asset($data->size_chart_image)}}" class="img-fluid" alt="{{$data->size_chart_image_alt}}">
                     @endif
                 </figure>
             </div>
@@ -652,6 +662,7 @@ App\Models\Product::where('id', $data->id)->increment('view_count', 1, ['last_vi
                 }) */
             },
             success : function(result) {
+                console.log(result.images);
                 if (result.error === false) {
                     // $loadingSwal.close();
                     $('#sizeHead').show();
@@ -668,9 +679,22 @@ App\Models\Product::where('id', $data->id)->increment('view_count', 1, ['last_vi
                     // color handling
                     let imgContentThumb = '';
                     let imgContentSlider = '';
+                    // $.each(result.images, (key, val) => {
+                    //     imgContentThumb += `<div class="product-details__gallery__thumb-single swiper-slide">
+                    //         <img src="${val.image}" alt="${val.image_alt ?? ''}" />
+                    //     </div>`;
+                    //     imgContentSlider += `<div class="product-details__gallery__slider-single swiper-slide">
+                    //         <img src="${val.image}" alt="${val.image_alt ?? ''}" />
+                    //     </div>`;
+                    // });
                     $.each(result.images, (key, val) => {
-                        imgContentThumb += `<div class="product-details__gallery__thumb-single swiper-slide"><img src="${val.image}" /></div>`;
-                        imgContentSlider += `<div class="product-details__gallery__slider-single swiper-slide"><img src="${val.image}" /></div>`;
+                        let altText = val.image_alt ? val.image_alt : 'Product image'; // fallback if empty
+                        imgContentThumb += `<div class="product-details__gallery__thumb-single swiper-slide">
+                            <img src="${val.image}" alt="${altText}" />
+                        </div>`;
+                        imgContentSlider += `<div class="product-details__gallery__slider-single swiper-slide">
+                            <img src="${val.image}" alt="${altText}" />
+                        </div>`;
                     });
                     $('.product-details__gallery__thumb .swiper-wrapper').html(imgContentThumb);
                     $('.product-details__gallery__slider .swiper-wrapper').html(imgContentSlider);

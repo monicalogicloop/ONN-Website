@@ -144,6 +144,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/variation/{id}/size/remove', 'Admin\ProductController@variationSizeDestroy')->name('variation.size.delete');
             Route::post('/variation/image/add', 'Admin\ProductController@variationImageUpload')->name('variation.image.add');
             Route::post('/variation/image/remove', 'Admin\ProductController@variationImageDestroy')->name('variation.image.delete');
+            Route::post('/variation/image/alt-update', 'Admin\ProductController@updateVariationImageAlt')->name('variation.image.alt.update');
             Route::post('/csv/upload', 'Admin\ProductController@variationCSVUpload')->name('variation.csv.upload');
             Route::post('/bulk/edit', 'Admin\ProductController@variationBulkEdit')->name('variation.bulk.edit');
             Route::post('/bulk/update', 'Admin\ProductController@variationBulkUpdate')->name('variation.bulk.update');
@@ -177,6 +178,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/{id}/update', 'Admin\FaqController@update')->name('update');
             Route::get('/{id}/status', 'Admin\FaqController@status')->name('status');
             Route::get('/{id}/delete', 'Admin\FaqController@destroy')->name('delete');
+        });
+
+        // Blog
+        Route::prefix('blog')->name('blog.')->group(function () {
+            Route::get('/', 'Admin\BlogController@index')->name('index');
+            Route::post('/store', 'Admin\BlogController@store')->name('store');
+            Route::get('/{id}/view', 'Admin\BlogController@show')->name('view');
+            Route::post('/{id}/update', 'Admin\BlogController@update')->name('update');
+            Route::get('/{id}/status', 'Admin\BlogController@status')->name('status');
+            Route::get('/{id}/delete', 'Admin\BlogController@destroy')->name('delete');
         });
 
 		// banner

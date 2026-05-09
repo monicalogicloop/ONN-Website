@@ -73,6 +73,7 @@ class ProductController extends Controller
             "sub_cat_id" => "nullable|integer",
             "collection_id" => "required|integer",
             "name" => "required|string|max:255",
+            'slug' => 'nullable|string|max:255',
             "short_desc" => "required",
             "desc" => "nullable",
             "price" => "required|integer",
@@ -80,6 +81,7 @@ class ProductController extends Controller
             "meta_title" => "nullable",
             "meta_desc" => "nullable",
             "meta_keyword" => "nullable",
+            "schema" => "nullable",
             "style_no" => "required|unique:products",
             "image" => "required|mimes:jpg,jpeg,png,svg,gif|max:10000000",
             "product_images" => "nullable|array",
@@ -158,6 +160,7 @@ class ProductController extends Controller
             "sub_cat_id" => "nullable|integer",
             "collection_id" => "nullable|integer",
             "name" => "required|string|max:255",
+            'slug' => 'nullable|string|max:255',
             "short_desc" => "required",
             "desc" => "nullable",
             "price" => "required|integer",
@@ -165,6 +168,7 @@ class ProductController extends Controller
             "meta_title" => "nullable|string",
             "meta_desc" => "nullable|string",
             "meta_keyword" => "nullable|string",
+            "schema" => "nullable|string",
             "style_no" => "required",
             "image" => "nullable",
             "size_chart_image" => "nullable",
@@ -287,6 +291,7 @@ class ProductController extends Controller
             'product_id' => 'required',
             'color_id' => 'required',
             'image' => 'required|array',
+            'alt' => 'nullable|string|max:255'
         ]);
 
         $product_id = $request->product_id;
@@ -307,6 +312,21 @@ class ProductController extends Controller
         }
 
         return redirect()->back()->with('success', 'Images added successfully!');
+    }
+
+    public function updateVariationImageAlt(Request $request){
+        $request->validate([
+            'id' => 'required|exists:product_images,id',
+            'image_alt' => 'nullable|string|max:255'
+        ]);
+
+        \App\Models\ProductImage::where('id', $request->id)
+            ->update(['image_alt' => $request->image_alt]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Alt text updated successfully'
+        ]);
     }
 
     public function variationSizeUpload(Request $request)

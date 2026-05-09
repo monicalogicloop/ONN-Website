@@ -65,12 +65,14 @@ class ProductController extends Controller
             foreach ($dataImage as $dataKey => $dataValue) {
                 $respImage[] = [
                     'image' => asset($dataValue->image),
+                    'image_alt' => $dataValue->image_alt ?? 'Product image',
                 ];
             }
         } else {
             $mainImage = Product::select('image')->where('id', $productId)->first();
             $respImage[] = [
-                'image' => asset($mainImage->image)
+                'image' => asset($mainImage->image),
+                'image_alt' => $mainImage->image_alt ?? 'Product image',
             ];
         }
 

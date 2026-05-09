@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
                 foreach ($categories as $catKey => $catValue) {
                     if (in_array_r($catValue->parentCatDetails ? $catValue->parentCatDetails->name : '', $categoryNavList)) continue;
 
-                    $childCategories = Category::select('slug', 'name', 'sketch_icon', 'image_path')->where('parent', $catValue->parent)->orderBy('position', 'asc')->where('status', 1)->get()->toArray();
+                    $childCategories = Category::select('slug', 'name', 'sketch_icon', 'image_path','home_image')->where('parent', $catValue->parent)->orderBy('position', 'asc')->where('status', 1)->get()->toArray();
 
                     $categoryNavList[] = [
                         'parent' => $catValue->parentCatDetails ? $catValue->parentCatDetails->name : '',

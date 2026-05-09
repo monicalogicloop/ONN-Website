@@ -1,0 +1,84 @@
+@font-face {
+    font-family: 'Antonio';
+    src: url('Antonio-ExtraLight.eot');
+    src: url('Antonio-ExtraLight.eot?#iefix') format('embedded-opentype'),
+        url('Antonio-ExtraLight.woff2') format('woff2'),
+        url('Antonio-ExtraLight.woff') format('woff'),
+        url('Antonio-ExtraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Antonio';
+    src: url('Antonio-SemiBold.eot');
+    src: url('Antonio-SemiBold.eot?#iefix') format('embedded-opentype'),
+        url('Antonio-SemiBold.woff2') format('woff2'),
+        url('Antonio-SemiBold.woff') format('woff'),
+        url('Antonio-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Antonio';
+    src: url('Antonio-Thin.eot');
+    src: url('Antonio-Thin.eot?#iefix') format('embedded-opentype'),
+        url('Antonio-Thin.woff2') format('woff2'),
+        url('Antonio-Thin.woff') format('woff'),
+        url('Antonio-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Antonio';
+    src: url('Antonio-Regular.eot');
+    src: url('Antonio-Regular.eot?#iefix') format('embedded-opentype'),
+        url('Antonio-Regular.woff2') format('woff2'),
+        url('Antonio-Regular.woff') format('woff'),
+        url('Antonio-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Antonio';
+    src: url('Antonio-Bold.eot');
+    src: url('Antonio-Bold.eot?#iefix') format('embedded-opentype'),
+        url('Antonio-Bold.woff2') format('woff2'),
+        url('Antonio-Bold.woff') format('woff'),
+        url('Antonio-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Antonio';
+    src: url('Antonio-Light.eot');
+    src: url('Antonio-Light.eot?#iefix') format('embedded-opentype'),
+        url('Antonio-Light.woff2') format('woff2'),
+        url('Antonio-Light.woff') format('woff'),
+        url('Antonio-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Antonio';
+    src: url('Antonio-Medium.eot');
+    src: url('Antonio-Medium.eot?#iefix') format('embedded-opentype'),
+        url('Antonio-Medium.woff2') format('woff2'),
+        url('Antonio-Medium.woff') format('woff'),
+        url('Antonio-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+

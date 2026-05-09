@@ -46,21 +46,28 @@ ga( 'require', 'ec' );</script> --}}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>ONN Total Comfort | @yield('page')</title>
-
+    @if(View::hasSection('meta'))
+        @yield('meta')
+    @else
+        <title>ONN Total Comfort | @yield('page')</title>
+    @endif
     <link rel="icon" href="{{asset('img/favicon.png')}}" type="image/png" sizes="16x16">
     <link rel="stylesheet" href="{{ asset('css/plugin.css') }}">
     <!-- <link rel="stylesheet" href="https://unpkg.com/swiper@8.0.7/swiper-bundle.min.css"> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="{{ asset('node_modules/select2/dist/css/select2.min.css') }}">
-    <link rel='stylesheet' href="{{ asset('node_modules/lightbox2/dist/css/lightbox.min.css?ver=5.8.2') }}">
-    <link rel='stylesheet' href="{{ asset('node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min.css') }}">
+    @if(request()->routeIs('front.checkout.*'))
+        <link rel="stylesheet" href="{{ asset('node_modules/select2/dist/css/select2.min.css') }}">
+    @endif
+    @if(request()->routeIs('front.content.about'))
+        <link rel='stylesheet' href="{{ asset('node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min.css') }}">
+    @endif
     <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}">
     <link rel="stylesheet" href="{{ asset('scss/css/preload.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
     <link rel="stylesheet" href="{{ asset('css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-	<link rel="canonical" href="https://onninternational.com/">
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+	<link rel="canonical" href="{{ url()->current() }}">
 
     <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
     <!-- <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script> -->
@@ -90,8 +97,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <header>
         <div class="container">
-            <div class="row align-items-center justify-content-between">
-                <div class="nav-toggle">
+            <div class="row header-main-row align-items-center justify-content-between">
+                <div class="nav-toggle d-lg-none ">
                     <span></span>
                 </div>
                 <div class="col-auto">
@@ -99,9 +106,317 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <img src="{{ asset('img/logo.png') }}">
                     </a>
                 </div>
-                <div class="col-auto d-none d-md-block ml-auto menu_area">
+                <div class="col-auto d-none d-lg-block menu_area">
                     <nav class="main-nav">
                         <ul>
+                            <li>
+                                <a href="javascript: void(0)">Innerwear</a>
+                                <div class="sub-menu mega-menu">
+                                    <div class="row">
+                                        <div class="col-7 section-heading category-collection">
+                                            <h2>INNER<span>WEAR</span></h2>
+                                            <div class="row mt-5">
+                                                @foreach ($menuCategories1 as $categoryKey => $categoryValue)
+                                                    <div class="menu-category__single col-xl-4 col-lg-6 mt-5">
+                                                        <a href="{{ route('front.category.detail', $categoryValue->slug) }}" class="category-card">
+                                                            <div class="content-wrapper">
+                                                                <h3>{{$categoryValue->name}}<span>.</span></h3>
+                                                            </div>
+                                                            <div class="image-wrapper">
+                                                                <img src="{{asset($categoryValue->home_image)}}" />
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="col-2 section-heading trending-collection">
+                                            <h3 style="line-height:48px;margin-bottom:10px;">TRENDING COLLECTIONS</h3>
+                                            <div class="menutrending__slider swiper-container">
+                                                <div class="slider swiper-wrapper">
+                                                    @foreach($innerwearTrendingProducts as $productKey => $productValue)
+                                                        <div class="home-product_wrapper swiper-slide">
+                                                            <a href="{{ route('front.product.detail', $productValue->slug) }}">
+                                                                <img src="{{asset($productValue->image)}}" class="w-100" />
+                                                                <h4 class="mt-2 p-2">{{$productValue->name}}</h4>
+                                                            </a>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 section-heading collection">
+                                            <h3>FROM OUR COLLECTIONS</h3>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="collection-grid">
+                                                        <a href="/collection/uk-classic">
+                                                            <img src="{{ asset('img/home/collection_Stretchz.png') }}" class="w-100">
+                                                        </a>
+                                                        <a href="/collection/uk-classic">
+                                                            <img src="{{ asset('img/home/collection_UKCLASSIC.png') }}" class="w-100">
+                                                        </a>
+                                                        <a href="/collection/uk-classic">
+                                                           <img src="{{ asset('img/home/collection_Platina.png') }}" class="w-100">
+                                                        </a>
+                                                        <a href="/collection/uk-classic">
+                                                           <img src="{{ asset('img/home/collection_Comfortz.png') }}" class="w-100">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="javascript: void(0)">Outerwear</a>
+                                <div class="sub-menu mega-menu">
+                                    <div class="row">
+                                        <div class="col-7 section-heading category-collection">
+                                            <h2>OUTER<span>WEAR</span></h2>
+                                            <div class="row mt-5">
+                                                @foreach ($menuCategories2 as $categoryKey => $categoryValue)
+                                                    <div class="menu-category__single col-xl-4 col-lg-6 mt-5">
+                                                        <a href="{{ route('front.category.detail', $categoryValue->slug) }}" class="category-card">
+                                                            <div class="content-wrapper">
+                                                                <h3>{{$categoryValue->name}}<span>.</span></h3>
+                                                            </div>
+                                                            <div class="image-wrapper">
+                                                                <img src="{{asset($categoryValue->home_image)}}" />
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="col-2 section-heading trending-collection">
+                                            <h3 style="line-height:48px;margin-bottom:10px;">TRENDING COLLECTIONS</h3>
+                                            <div class="menutrending__slider swiper-container">
+                                                <div class="slider swiper-wrapper">
+                                                    @foreach($innerwearTrendingProducts as $productKey => $productValue)
+                                                        <div class="home-product_wrapper swiper-slide">
+                                                            <a href="{{ route('front.product.detail', $productValue->slug) }}">
+                                                                <img src="{{asset($productValue->image)}}" class="w-100" />
+                                                                <h4 class="mt-2 p-2">{{$productValue->name}}</h4>
+                                                            </a>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 section-heading collection">
+                                            <h3>FROM OUR COLLECTIONS</h3>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="collection-grid">
+                                                        <a href="/collection/uk-classic">
+                                                            <img src="{{ asset('img/home/collection_FASHION.png') }}" class="w-100">
+                                                        </a>
+                                                        <a href="/collection/uk-classic">
+                                                            <img src="{{ asset('img/home/collection_Acttive.png') }}" class="w-100">
+                                                        </a>
+                                                        <a href="/collection/uk-classic">
+                                                           <img src="{{ asset('img/home/collection_UKCLASSIC.png') }}" class="w-100">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="javascript: void(0)">Winterwear</a>
+                                <div class="sub-menu mega-menu">
+                                    <div class="row">
+                                        <div class="col-7 section-heading category-collection">
+                                            <h2>WINTER<span>WEAR</span></h2>
+                                            <div class="row mt-5">
+                                                @foreach ($menuCategories3 as $categoryKey => $categoryValue)
+                                                    <div class="menu-category__single col-xl-4 col-lg-6 mt-5">
+                                                        <a href="{{ route('front.category.detail', $categoryValue->slug) }}" class="category-card">
+                                                            <div class="content-wrapper">
+                                                                <h3>{{$categoryValue->name}}<span>.</span></h3>
+                                                            </div>
+                                                            <div class="image-wrapper">
+                                                                <img src="{{asset($categoryValue->home_image)}}" />
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="col-2 section-heading trending-collection">
+                                            <h3 style="line-height:48px;margin-bottom:10px;">TRENDING COLLECTIONS</h3>
+                                            <div class="menutrending__slider swiper-container">
+                                                <div class="slider swiper-wrapper">
+                                                    @foreach($innerwearTrendingProducts as $productKey => $productValue)
+                                                        <div class="home-product_wrapper swiper-slide">
+                                                            <a href="{{ route('front.product.detail', $productValue->slug) }}">
+                                                                <img src="{{asset($productValue->image)}}" class="w-100" />
+                                                                <h4 class="mt-2 p-2">{{$productValue->name}}</h4>
+                                                            </a>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 section-heading collection">
+                                            <h3>FROM OUR COLLECTIONS</h3>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="collection-grid">
+                                                        <a href="/collection/uk-classic">
+                                                            <img src="{{ asset('img/home/collection_IGNITE.png') }}" class="w-100">
+                                                        </a>
+                                                        <a href="/collection/uk-classic">
+                                                            <img src="{{ asset('img/home/collection_Thermal.png') }}" class="w-100">
+                                                        </a>
+                                                        <a href="/collection/uk-classic">
+                                                           <img src="{{ asset('img/home/collection_Platina.png') }}" class="w-100">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="javascript: void(0)">Footkins</a>
+                                <div class="sub-menu mega-menu">
+                                    <div class="row">
+                                        <div class="col-7 section-heading">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div><h2>FOOTKINS</h2></div>
+                                                <div style="background-color: red;color:#fff;background: linear-gradient(180deg,#C10909 0%, #5B0404 100%);padding: 5px 20px;border-radius: 20px;font-weight: 8000;">
+                                                    <p style="margin-bottom: 0px;font-weight: 600;">View All</p></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col p-3">
+                                                    <img src="{{ asset('img/home/menu-footkins-product_01.png') }}" class="w-100">
+                                                </div>
+                                                <div class="col p-3">
+                                                    <img src="{{ asset('img/home/menu-footkins-product_02.png') }}" class="w-100">
+                                                </div>
+                                                <div class="col p-3">
+                                                    <img src="{{ asset('img/home/menu-footkins-product_03.png') }}" class="w-100">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-2 section-heading trending-collection">
+                                            <h3 style="line-height:48px;">TRENDING COLLECTIONS</h3>
+                                            <div class="menutrending__slider swiper-container">
+                                                <div class="slider swiper-wrapper">
+                                                    @foreach($footkinsTrendingProducts as $productKey => $productValue)
+                                                        <div class="home-product_wrapper swiper-slide">
+                                                            <a href="{{ route('front.product.detail', $productValue->slug) }}">
+                                                                <img src="{{asset($productValue->image)}}" class="w-100" />
+                                                                <h4 class="mt-2 p-2">{{$productValue->name}}</h4>
+                                                            </a>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 section-heading">
+                                            <h3>FROM OUR COLLECTIONS</h3>
+                                            <div class="row">
+                                                <div class="col p-2">
+                                                    <img src="{{ asset('img/home/menu-footkins-collection_01.png') }}" class="w-100">
+                                                </div>
+                                                <div class="col">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="javascript: void(0)">Accessories</a>
+                                <div class="sub-menu mega-menu">
+                                    <div class="row">
+                                        <div class="col-7 section-heading category-collection">
+                                            <h2>ACCESSORIES</h2>
+                                            <div class="row mt-5">
+                                                @foreach ($menuCategories5 as $categoryKey => $categoryValue)
+                                                    <div class="menu-category__single col-xl-4 col-lg-6 mt-5">
+                                                        <a href="{{ route('front.category.detail', $categoryValue->slug) }}" class="category-card">
+                                                            <div class="content-wrapper">
+                                                                <h3>{{$categoryValue->name}}<span>.</span></h3>
+                                                            </div>
+                                                            <div class="image-wrapper">
+                                                                <img src="{{asset($categoryValue->home_image)}}" />
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="col-2 section-heading trending-collection">
+                                            <h3 style="line-height:48px;margin-bottom:10px;">TRENDING COLLECTIONS</h3>
+                                            <div class="menutrending__slider swiper-container">
+                                                <div class="slider swiper-wrapper">
+                                                    @foreach($innerwearTrendingProducts as $productKey => $productValue)
+                                                        <div class="home-product_wrapper swiper-slide">
+                                                            <a href="{{ route('front.product.detail', $productValue->slug) }}">
+                                                                <img src="{{asset($productValue->image)}}" class="w-100" />
+                                                                <h4 class="mt-2 p-2">{{$productValue->name}}</h4>
+                                                            </a>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 section-heading collection">
+                                            <h3>FROM OUR COLLECTIONS</h3>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="collection-grid">
+                                                        <a href="/collection/uk-classic">
+                                                            <img src="{{ asset('img/home/menu-innerwear-collection_01.png') }}" class="w-100">
+                                                        </a>
+                                                        <a href="/collection/uk-classic">
+                                                            <img src="{{ asset('img/home/menu-innerwear-collection_02.png') }}" class="w-100">
+                                                        </a>
+                                                        <a href="/collection/uk-classic">
+                                                           <img src="{{ asset('img/home/menu-innerwear-collection_03.png') }}" class="w-100">
+                                                        </a>
+                                                        <a href="/collection/uk-classic">
+                                                           <img src="{{ asset('img/home/menu-innerwear-collection_04.png') }}" class="w-100">
+                                                        </a>
+                                                        <a href="/collection/uk-classic">
+                                                           <img src="{{ asset('img/home/menu-innerwear-collection_05.png') }}" class="w-100">
+                                                        </a>
+                                                        <a href="/collection/uk-classic">
+                                                           <img src="{{ asset('img/home/menu-innerwear-collection_06.png') }}" class="w-100">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="javascript: void(0)">Collection</a>
+                                <div class="sub-menu mega-menu">
+                                    <div class="row w-100">
+                                        <div class="col">
+                                            <div class="collection-grid-wrapper">
+                                                @foreach($collections as $collectionKey => $collectionValue)
+                                                    <a href="{{ route('front.collection.detail', $collectionValue->slug) }}">
+                                                        <img src="{{ asset($collectionValue->sketch_icon) }}" />
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        {{-- <ul>
                             <li>
                                 <a href="{{ route('front.home') }}" class="home"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></a>
                             </li>
@@ -139,7 +454,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <!-- <li>
                                 <a href="{{route('front.sale.index')}}">Sale</a>
                             </li> -->
-                        </ul>
+                        </ul> --}}
                     </nav>
                 </div>
                 <div class="col-auto">
@@ -319,11 +634,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <div class="col">
                             <div class="footer-block">
                                 <ul class="social">
-                                    <li><a href="{{$settings[9]->content}}" target="_blank"><i class="fab fa-facebook-f" aria-hidden="true"></i></a></li>
-                                    <li><a href="{{$settings[10]->content}}" target="_blank"><i class="fab fa-twitter" aria-hidden="true"></i></a></li>
-                                    <li><a href="{{$settings[12]->content}}" target="_blank"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
-                                    <li><a href="{{$settings[11]->content}}" target="_blank"><i class="fab fa-youtube" aria-hidden="true"></i></a></li>
-                                </ul>
+                                <li>
+                                    <a href="{{ $settings['facebook']->content ?? '#' }}" target="_blank">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ $settings['twitter']->content ?? '#' }}" target="_blank">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ $settings['instagram']->content ?? '#' }}" target="_blank">
+                                        <i class="fab fa-instagram"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ $settings['youtube']->content ?? '#' }}" target="_blank">
+                                        <i class="fab fa-youtube"></i>
+                                    </a>
+                                </li>
+                            </ul>
+
                             </div>
                         </div>
                     </div>
@@ -395,11 +727,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                 <div class="footer-block">
                                     <div class="footer-heading">Customer Support</div>
                                     <ul class="footer-block-menu support">
-                                        <li><a href="tel:{{ $settings[6]->content }}">
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> {{ $settings[6]->content }}</a></li>
-										<li><a href="tel:{{ $settings[6]->content }}">
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> 9 AM to 7 PM on all working days.</a></li>
-										<li><a href="mailto:{{ $settings[7]->content }}"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> {{ $settings[7]->content }}</a></li>
+                                            <li>
+                                                <a href="tel:{{ $settings['phone']->content ?? '' }}">
+                                                    <!-- phone icon -->
+                                                    {{ $settings['phone']->content ?? '' }}
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="#">
+                                                    <!-- clock icon -->
+                                                    {{ $settings['working_hours']->content ?? '9 AM to 7 PM on all working days.' }}
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="mailto:{{ $settings['email']->content ?? '' }}">
+                                                    <!-- mail icon -->
+                                                    {{ $settings['email']->content ?? '' }}
+                                                </a>
+                                            </li>
 											<li style="margin-top:5px"><a href="javascript:void(0)"><svg style="vertical-align:top;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span style="display:inline-block;white-space:normal; padding-left:3px;">39 KALI KRISHNA TAGORE STREET, KOLKATA - 700007</span></a></li>
                                     </ul>
                                 </div>
@@ -443,17 +790,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <script src="{{ asset('node_modules/gsap/dist/ScrollTrigger.min.js') }}"></script>
     <script src="{{ asset('node_modules/waypoints/lib/jquery.waypoints.min.js') }}"></script>
     <script src="{{ asset('node_modules/counterup/jquery.counterup.min.js') }}"></script>
-    <script src="{{ asset('node_modules/lightbox2/dist/js/lightbox.min.js') }}"></script>
-    <script src="{{ asset('node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min.js') }}"></script>
-    <script src="{{ asset('node_modules/select2/dist/js/select2.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.16.0/TweenMax.min.js"></script>
-    <script src="{{ asset('node_modules/scrollmagic/scrollmagic/minified/ScrollMagic.min.js') }}"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.3/plugins/animation.gsap.min.js'></script>
-    <script src="{{ asset('node_modules/scrollmagic/scrollmagic/minified/plugins/debug.addIndicators.min.js') }}"></script>
+    @if(request()->routeIs('front.content.about'))
+        <script src="{{ asset('node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min.js') }}"></script>
+    @endif
+    @if(request()->routeIs('front.checkout.*'))
+        <script src="{{ asset('node_modules/select2/dist/js/select2.min.js') }}"></script>
+    @endif
+    @if(request()->routeIs('front.home'))
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.16.0/TweenMax.min.js"></script>
+        <script src="{{ asset('node_modules/scrollmagic/scrollmagic/minified/ScrollMagic.min.js') }}"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.3/plugins/animation.gsap.min.js'></script>
+        <script src="{{ asset('node_modules/scrollmagic/scrollmagic/minified/plugins/debug.addIndicators.min.js') }}"></script>
+    @endif
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    @if(request()->is('checkout*'))
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    @endif
     <script type="text/javascript" src="lib.js"></script>
+
 
     <script>
         // enable tooltips everywhere
@@ -659,7 +1014,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 }
             });
         });
-		document.addEventListener('contextmenu', event => event.preventDefault());
+		// document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function (e) {
             if(e.keyCode == 123) {
                 return false;

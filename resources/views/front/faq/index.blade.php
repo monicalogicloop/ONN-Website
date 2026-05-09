@@ -35,7 +35,7 @@
             <div class="col-sm-8">
                 <div class="cms_context">
                     @foreach ($data as $faqKey => $faqValue)
-                        <h3 class="faq_heading">{!! $faqValue->question !!}</h3>
+                        <h3 class="faq_heading">{{ $faqValue->question }}</h3>
                         <div class="faq_content">
                             {!! $faqValue->answer !!}
                         </div>
@@ -45,4 +45,34 @@
         </div>
     </div>
 </section>
+@endsection
+
+@section('script')
+<script>
+    (function () {
+        var $headings = jQuery('.cms_context .faq_heading');
+        var $contents = jQuery('.cms_context .faq_content');
+
+        if (!$headings.length) return;
+
+        $contents.hide();
+        $headings.removeClass('active');
+        $headings.first().addClass('active');
+        $headings.first().next('.faq_content').show();
+
+        $headings.on('click', function () {
+            var $currentHeading = jQuery(this);
+            var $currentContent = $currentHeading.next('.faq_content');
+            var isActive = $currentHeading.hasClass('active');
+
+            $headings.removeClass('active');
+            $contents.stop(true, true).slideUp();
+
+            if (!isActive) {
+                $currentHeading.addClass('active');
+                $currentContent.stop(true, true).slideDown();
+            }
+        });
+    })();
+</script>
 @endsection

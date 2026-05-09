@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Support\Facades\Cache;
 use DB;
 class CategoryController extends Controller
 {
@@ -19,22 +20,52 @@ class CategoryController extends Controller
     public function detail(Request $request, $slug)
     {
         $data = $this->categoryRepository->getCategoryBySlug($slug);
+        // If category not found → show 404
+        if (!$data) {
+            return response()->view('front.404', [], 404);
+        }
         $sizes = $this->categoryRepository->getAllSizes();
         $colors = $this->categoryRepository->getAllColors();
-		$range = Product::selectRaw('MIN(offer_price) AS min, MAX(offer_price) AS max')->first();
-        $sizeData=DB::select("SELECT s.id AS id, s.name AS name FROM `sizes` s
-        INNER JOIN product_color_sizes pc ON pc.size = s.id
-        INNER JOIN products p ON p.id = pc.product_id
-        INNER JOIN categories c ON c.id = p.cat_id
-        WHERE c.slug = '$data->slug' GROUP BY s.name ORDER BY s.id;");
+		$range = Cache::remember("category:{$data->id}:range", 600, function () use ($data) {
+            return Product::where('cat_id', $data->id)
+                ->where('status', 1)
+                ->selectRaw('MIN(offer_price) AS min, MAX(offer_price) AS max')
+                ->first();
+        });
 
-        $colorData=DB::select("SELECT co.id AS id, co.name AS name,co.code AS code FROM `colors` co
-        INNER JOIN product_color_sizes pc ON pc.color = co.id
-        INNER JOIN products p ON p.id = pc.product_id
-        INNER JOIN categories c ON c.id = p.cat_id
-        WHERE c.slug = '$data->slug' GROUP BY co.name ORDER BY co.id;");
+        $sizeData = Cache::remember("category:{$data->id}:sizes", 600, function () use ($data) {
+            return DB::table('sizes as s')
+                ->join('product_color_sizes as pc', 'pc.size', '=', 's.id')
+                ->join('products as p', 'p.id', '=', 'pc.product_id')
+                ->where('p.cat_id', $data->id)
+                ->where('p.status', 1)
+                ->select('s.id', 's.name')
+                ->groupBy('s.id', 's.name')
+                ->orderBy('s.id')
+                ->get();
+        });
 
-        $styleNo=Product::select('style_no')->where('cat_id',$data->id)->get();
+        $colorData = Cache::remember("category:{$data->id}:colors", 600, function () use ($data) {
+            return DB::table('colors as co')
+                ->join('product_color_sizes as pc', 'pc.color', '=', 'co.id')
+                ->join('products as p', 'p.id', '=', 'pc.product_id')
+                ->where('p.cat_id', $data->id)
+                ->where('p.status', 1)
+                ->select('co.id', 'co.name', 'co.code')
+                ->groupBy('co.id', 'co.name', 'co.code')
+                ->orderBy('co.id')
+                ->get();
+        });
+
+        $styleNo = Cache::remember("category:{$data->id}:styles", 600, function () use ($data) {
+            return Product::where('cat_id', $data->id)
+                ->where('status', 1)
+                ->whereNotNull('style_no')
+                ->select('style_no')
+                ->distinct()
+                ->orderBy('style_no')
+                ->get();
+        });
         if ($data) {
             return view('front.category.detail', compact('data', 'sizes', 'colors','range','sizeData','colorData','styleNo'));
         } else {

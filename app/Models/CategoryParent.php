@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class CategoryParent extends Model
 {
-    //
+    protected $fillable = ['name', 'slug', 'position', 'status'];
 }

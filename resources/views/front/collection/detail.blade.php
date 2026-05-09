@@ -2,6 +2,16 @@
 
 @section('page', 'Collection')
 
+@section('meta')
+    <title>{{ $data->meta_title ?? $data->name }}</title>
+    <meta name="description" content="{{ $data->meta_description ?? '' }}">
+    @if($data->schema)
+        <script type="application/ld+json">
+            {!! $data->schema !!}
+        </script>
+    @endif
+@endsection
+
 @section('content')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css">
     <style>
@@ -142,12 +152,13 @@
                                         'id' => $ProductDetailsValue->cat_id,
                                         'name' => $ProductDetailsValue->category->name,
                                         'icon' => $ProductDetailsValue->category->icon_path,
+                                        'icon_alt' => $ProductDetailsValue->category->icon_alt,
                                     ];
                                 }
                             }
                         }
                     
-                        // dd($customCats);
+                        //dd($customCats);
                     }
                 @endphp
                 {{-- {{ dd($categories) }} --}}
@@ -157,7 +168,7 @@
                             <a href="javascript: void(0)" class="customCats" id="customCat_{{ $categoryValue['id'] }}"
                                 data-id="{{ $categoryValue['id'] }}">
                                 <figure>
-                                    <img src="{{ asset($categoryValue['icon']) }}">
+                                    <img src="{{ asset($categoryValue['icon']) }}" alt="{{ $categoryValue['icon_alt'] }}">
                                 </figure>
                                 <figcaption>
                                     {{ $categoryValue['name'] }}

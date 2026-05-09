@@ -51,6 +51,13 @@
                                 </div>
                                 @error('image') <p class="small text-danger">{{ $message }}</p> @enderror
                             </div>
+                            <div class="col-md-12 card mt-3">
+                                <div class="card-header p-0 mb-3">Link</div>
+                                <div class="card-body p-0">
+                                    <input type="url" name="link" class="form-control" placeholder="https://example.com" value="{{ old('link', $data->link) }}">
+                                </div>
+                                @error('link') <p class="small text-danger">{{ $message }}</p> @enderror
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">

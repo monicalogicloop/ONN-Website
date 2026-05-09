@@ -41,6 +41,9 @@ class BannerRepository implements BannerInterface
             $banner->type = 'video';
         }
 
+        //link
+        $banner->link = $collection['link'] ?? null;
+
         // position
         $latestPosition = Banner::select('position')->orderBy('position', 'desc')->first();
         if(!empty($latestPosition)) {
@@ -77,6 +80,11 @@ class BannerRepository implements BannerInterface
             } else {
                 $banner->type = 'video';
             }
+        }
+
+        // update link
+        if (isset($collection['link'])) {
+            $banner->link = $collection['link'];
         }
 
         $banner->save();

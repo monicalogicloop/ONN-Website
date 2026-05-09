@@ -192,7 +192,7 @@
                 <div class="footer-main-top">
                     <div class="row align-items-center align-items-sm-end">
                         <div class="col-auto">
-                            <img src="{{ asset('img/footer-logo.png') }}" />
+                            <img src="{{ asset('img/footer-logo.png') }}"  alt="ONN Logo White"/>
                         </div>
                         <div class="col">
                             <div class="footer-block">

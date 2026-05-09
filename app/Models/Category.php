@@ -9,7 +9,7 @@ class Category extends Model
 {
     // use Notifiable;
 
-    protected $fillable = ['name', 'description', 'image_path', 'banner_image', 'slug'];
+    protected $fillable = ['name', 'description', 'image_path', 'banner_image', 'slug', 'footer_content', 'faq'];
 
     public function ProductDetails(string $orderBy = 'position', string $order = 'asc') {
         return $this->hasMany('App\Models\Product', 'cat_id', 'id')->orderBy($orderBy, $order);

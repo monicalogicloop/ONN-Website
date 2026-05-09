@@ -58,12 +58,28 @@ class CollectionRepository implements CollectionInterface
         $modelDetails = new Collection;
         $modelDetails->name = $collection['name'];
         $modelDetails->description = $collection['description'];
+        $modelDetails->icon_alt = $collection['icon_alt'];
+        $modelDetails->sketch_icon_alt = $collection['sketch_icon_alt'];
+        $modelDetails->image_alt = $collection['image_alt'];
+        $modelDetails->banner_image_alt = $collection['banner_image_alt'];
+        $modelDetails->meta_title = $collection['meta_title'];
+        $modelDetails->meta_description = $collection['meta_description'];
+        $modelDetails->schema = $collection['schema'];
 
         // generate slug
-        $slug = Str::slug($collection['name'], '-');
-        $slugExistCount = Collection::where('slug', $slug)->count();
-        if ($slugExistCount > 0) $slug = $slug . '-' . ($slugExistCount + 1);
+        // $slug = Str::slug($collection['name'], '-');
+        // $slugExistCount = Collection::where('slug', $slug)->count();
+        // if ($slugExistCount > 0) $slug = $slug . '-' . ($slugExistCount + 1);
+        // $modelDetails->slug = $slug;
+
+        $baseSlug = Str::slug($collection['name'], '-');
+        $slug = $baseSlug;
+        $counter = 1;
+        while (Collection::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter++;
+        }
         $modelDetails->slug = $slug;
+
 
         // icon image
         $image = $collection['icon_path'];
@@ -107,6 +123,13 @@ class CollectionRepository implements CollectionInterface
 
         $modelDetails->name = $collection['name'];
         $modelDetails->description = $collection['description'];
+        $modelDetails->icon_alt = $collection['icon_alt'];
+        $modelDetails->sketch_icon_alt = $collection['sketch_icon_alt'];
+        $modelDetails->image_alt = $collection['image_alt'];
+        $modelDetails->banner_image_alt = $collection['banner_image_alt'];
+        $modelDetails->meta_title = $collection['meta_title'];
+        $modelDetails->meta_description = $collection['meta_description'];
+        $modelDetails->schema = $collection['schema'];
         // $modelDetails->slug = $collection['slug'];
 
         // if (in_array('image_path', $newDetails)) {
@@ -118,10 +141,28 @@ class CollectionRepository implements CollectionInterface
         // }
 
         // generate slug
-        $slug = Str::slug($collection['name'], '-');
-        $slugExistCount = Collection::where('slug', $slug)->count();
-        if ($slugExistCount > 0) $slug = $slug . '-' . ($slugExistCount + 1);
-        $modelDetails->slug = $slug;
+        // $slug = Str::slug($collection['name'], '-');
+        // $slugExistCount = Collection::where('slug', $slug)->count();
+        // if ($slugExistCount > 0) $slug = $slug . '-' . ($slugExistCount + 1);
+        // $modelDetails->slug = $slug;
+
+        // regenerate slug only if name changed
+        if ($modelDetails->name !== $collection['name']) {
+
+            $baseSlug = Str::slug($collection['name'], '-');
+            $slug = $baseSlug;
+            $counter = 1;
+
+            while (
+                Collection::where('slug', $slug)
+                    ->where('id', '!=', $collectionId)
+                    ->exists()
+            ) {
+                $slug = $baseSlug . '-' . $counter++;
+            }
+
+            $modelDetails->slug = $slug;
+        }
 
         if (isset($newDetails['icon_path'])) {
             $image = $collection['icon_path'];

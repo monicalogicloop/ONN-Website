@@ -17,6 +17,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::name('front.')->group(function () {
     // home
     Route::get('/', 'Front\FrontController@index')->name('home');
+    Route::get('/homenew', 'Front\FrontController@homenew')->name('homenew');
     Route::post('/subscribe', 'Front\FrontController@mailSubscribe')->name('subscription');
 
     // category detail
@@ -231,3 +232,10 @@ Route::get('/twentyfive', 'Front\FrontController@twentyfive')->name('twentyfive'
 Route::get('/catalogue', 'Front\FrontController@catalogue')->name('catalogue');
 
 require 'admin.php';
+// Route::prefix('admin')->name('admin.')->group(function () {
+//     require base_path('routes/admin.php');
+// });
+
+Route::fallback(function () {
+    return response()->view('front.404', [], 404);
+});

@@ -121,6 +121,8 @@
 
                         <li class="{{ ( request()->is('admin/faq*') ) ? 'active' : '' }}"><a href="{{ route('admin.faq.index') }}"><i class="fi fi-br-database"></i> <span>FAQs</span></a></li>
 
+                        <li class="{{ ( request()->is('admin/blog*') ) ? 'active' : '' }}"><a href="{{ route('admin.blog.index') }}"><i class="fi fi-br-database"></i> <span>Blogs</span></a></li>
+
                         <li class="{{ ( request()->is('admin/gallery*') ) ? 'active' : '' }}"><a href="{{ route('admin.gallery.index') }}"><i class="fi fi-br-database"></i> <span>Gallery</span></a></li>
 
                         <li class="{{ ( request()->is('admin/mail*') ) ? 'active' : '' }}"><a href="{{ route('admin.subscription.mail.index') }}"><i class="fi fi-br-database"></i> <span>Subscription Mail</span></a></li>

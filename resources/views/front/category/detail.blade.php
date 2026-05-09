@@ -2,6 +2,16 @@
 
 @section('page', 'Category')
 
+@section('meta')
+    <title>{{ $data->meta_title ?? $data->name }}</title>
+    <meta name="description" content="{{ $data->meta_description ?? '' }}">
+    @if($data->schema)
+        <script type="application/ld+json">
+            {!! $data->schema !!}
+        </script>
+    @endif
+@endsection
+
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css">
     <style>
@@ -175,7 +185,7 @@
                     <li class="position-relative">
                         <a href="{{ route('front.category.detail', $categoryValue->slug) }}" class="customCats {{ ($categoryValue->id == $data->id) ? 'active' : '' }}" id="customCat_{{$categoryValue['id']}}" data-id="{{$categoryValue['id']}}">
                             <figure>
-                                <img src="{{ asset($categoryValue['icon_path']) }}">
+                                <img src="{{ asset($categoryValue['icon_path']) }}" alt="{{ $categoryValue['icon_alt'] }}" loading="lazy" decoding="async">
                             </figure>
                             <figcaption>
                                 {{ $categoryValue['name'] }}
@@ -373,7 +383,7 @@
                     @php if($categoryProductValue->status == 0) {continue;} @endphp
                     <a href="{{ route('front.product.detail', $categoryProductValue->slug) }}" class="product__single" data-events data-cat="tshirt">
                         <figure>
-                            <img src="{{asset($categoryProductValue->image)}}" />
+                            <img src="{{asset($categoryProductValue->image)}}" alt="{{$categoryProductValue->image_alt}}" loading="lazy" decoding="async"/>
                         </figure>
                         <figcaption>
                             <h4>{{$categoryProductValue->name}} <br/>Style No: <span>{{$categoryProductValue->style_no}}</span></h4>
@@ -422,9 +432,99 @@
         @endif
     </div>
 </section>
+@if(!empty($data->faq))
+<section class="cart-wrapper category-faq-section mb-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="mb-3">Frequently Asked Questions</h3>
+                <div class="cms_context">
+                    {!! $data->faq !!}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@endif
+@if($data->footer_content ==! "")
+<section class="footer-content-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+               <div class="footer-content-wrapper">
+                    <div class="footer-content collapsed">
+                        {!! $data->footer_content ?? '' !!}
+                    </div>
+                    <div class="read-more-btn-wrapper">
+                        <button class="read-more-btn">Read More <i class="fas fa-chevron-down"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@endif
 @endsection
 
 @section('script')
+<script>
+    $(document).ready(function () {
+        var $faqSection = $('.category-faq-section .cms_context');
+        if ($faqSection.length) {
+            var $headings = $faqSection.find('.faq_heading');
+            var $contents = $faqSection.find('.faq_content');
+
+            $contents.hide();
+            $headings.removeClass('active');
+
+            if ($headings.length) {
+                $headings.first().addClass('active');
+                $headings.first().next('.faq_content').show();
+            }
+
+            $headings.off('click.categoryFaq').on('click.categoryFaq', function () {
+                var $currentHeading = $(this);
+                var $currentContent = $currentHeading.next('.faq_content');
+                var isActive = $currentHeading.hasClass('active');
+
+                $headings.removeClass('active');
+                $contents.stop(true, true).slideUp();
+
+                if (!isActive) {
+                    $currentHeading.addClass('active');
+                    $currentContent.stop(true, true).slideDown();
+                }
+            });
+        }
+
+        // Hide button if content is shorter than max-height
+        $('.footer-content-wrapper').each(function () {
+            const $content = $(this).find('.footer-content');
+            const $btnWrapper = $(this).find('.read-more-btn-wrapper');
+
+            if ($content[0].scrollHeight <= 100) {
+                // Content is short, no need for read more
+                $content.removeClass('collapsed');
+                $btnWrapper.addClass('d-none');
+            }
+        });
+
+        // Toggle read more / read less
+        $('.read-more-btn').on('click', function () {
+            const $btn = $(this);
+            const $content = $btn.closest('.footer-content-wrapper').find('.footer-content');
+
+            $content.toggleClass('collapsed expanded');
+            $btn.toggleClass('active');
+
+            if ($btn.hasClass('active')) {
+                $btn.html('Read Less <i class="fas fa-chevron-down"></i>');
+            } else {
+                $btn.html('Read More <i class="fas fa-chevron-down"></i>');
+            }
+        });
+    });
+</script>
 <script>
      const filterLis = document.querySelectorAll('.filter_li')
         filterLis.forEach(filterLi => {
@@ -497,7 +597,7 @@
                         content += `
                         <a href="${url}" class="product__single" data-events data-cat="tshirt">
                             <figure>
-                                <img src="{{asset('${value.image}')}}" />
+                                <img src="{{asset('${value.image}')}}" loading="lazy" decoding="async" />
                                 <!--<h6>${value.styleNo}</h6>-->
                             </figure>
                             <figcaption>

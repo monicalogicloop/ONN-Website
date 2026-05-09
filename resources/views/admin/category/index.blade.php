@@ -93,6 +93,7 @@
                                     <th class="text-center"><i class="fi fi-br-picture"></i> Sketch</th>
                                     <th class="text-center"><i class="fi fi-br-picture"></i> Thumb</th>
                                     <th class="text-center"><i class="fi fi-br-picture"></i> Banner</th>
+                                    <th class="text-center"><i class="fi fi-br-picture"></i> Home</th>
                                     <th>Name</th>
                                     <th>Products</th>
                                     <th>Date</th>
@@ -131,6 +132,9 @@
                                     </td>
                                     <td class="text-center column-thumb">
                                         <img src="{{ asset($item->banner_image) }}">
+                                    </td>
+                                    <td class="text-center column-thumb">
+                                        <img src="{{ asset($item->home_image) }}">
                                     </td>
                                     <td>
                                         <h6 class="text-dark">{{$item->name ? $item->name : ''}}</h6>
@@ -192,6 +196,32 @@
                                             <textarea name="description" class="form-control">{{old('description')}}</textarea>
                                             @error('description') <p class="small text-danger">{{ $message }}</p> @enderror
                                         </div>
+                                        <div class="form-group mb-3">
+                                            <label class="label-control">Meta Title </label>
+                                            <textarea name="meta_title" class="form-control">{{old('meta_title')}}</textarea>
+                                            @error('meta_title') <p class="small text-danger">{{ $message }}</p> @enderror
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label class="label-control">Meta Description </label>
+                                            <textarea name="meta_description" class="form-control">{{old('meta_description')}}</textarea>
+                                            @error('meta_description') <p class="small text-danger">{{ $message }}</p> @enderror
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label class="label-control">Schemas </label>
+                                            <textarea name="schema" class="form-control">{{old('schema')}}</textarea>
+                                            @error('schema') <p class="small text-danger">{{ $message }}</p> @enderror
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label class="label-control">Footer Content </label>
+                                            <textarea name="footer_content" class="form-control">{{old('footer_content')}}</textarea>
+                                            @error('footer_content') <p class="small text-danger">{{ $message }}</p> @enderror
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label class="label-control">FAQ (Accordion HTML) </label>
+                                            <textarea name="faq" class="form-control" rows="8">{{old('faq')}}</textarea>
+                                            <small class="text-muted">Use pairs of .faq_heading and .faq_content blocks.</small>
+                                            @error('faq') <p class="small text-danger">{{ $message }}</p> @enderror
+                                        </div>
                                     </div>
                                     <div class="col-12 col-md-6 col-xl-12">
                                         <div class="row">
@@ -214,6 +244,13 @@
                                                 </div>
                                                 <small>Image Size: 230px X 282px</small>
                                                 @error('icon_path') <p class="small text-danger">{{ $message }}</p> @enderror
+                                                <div>
+                                                    <label class="form-label">Icon Alt Text</label>
+                                                    <input type="text" name="icon_alt" placeholder="" class="form-control" value="{{old('icon_alt')}}">
+                                                    @error('icon_alt') 
+                                                        <p class="small text-danger">{{ $message }}</p> 
+                                                    @enderror
+                                                </div>
                                             </div>
                                             <div class="col-md-6 card">
                                                 <div class="card-header p-0 mb-3">Sketch icon <span class="text-danger">*</span></div>
@@ -234,6 +271,13 @@
                                                 </div>
                                                 <small>Image Size: 100px X 100px</small>
                                                 @error('sketch_icon') <p class="small text-danger">{{ $message }}</p> @enderror
+                                                <div>
+                                                    <label class="form-label">Sketch Alt Text</label>
+                                                    <input type="text" name="sketch_icon_alt" placeholder="" class="form-control" value="{{old('sketch_icon_alt')}}">
+                                                    @error('sketch_icon_alt') 
+                                                        <p class="small text-danger">{{ $message }}</p> 
+                                                    @enderror
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -256,6 +300,13 @@
                                                 </div>
                                                 <small>Image Size: 512px X 512px</small>
                                                 @error('image_path') <p class="small text-danger">{{ $message }}</p> @enderror
+                                                <div>
+                                                    <label class="form-label">Image Alt Text</label>
+                                                    <input type="text" name="image_alt" placeholder="" class="form-control" value="{{old('image_alt')}}">
+                                                    @error('image_alt') 
+                                                        <p class="small text-danger">{{ $message }}</p> 
+                                                    @enderror
+                                                </div>
                                             </div>
                                             <div class="col-md-6 card">
                                                 <div class="card-header p-0 mb-3">Banner <span class="text-danger">*</span></div>
@@ -276,6 +327,42 @@
                                                 </div>
                                                 <small>Image Size: 1920px X 1080px</small>
                                                 @error('banner_image') <p class="small text-danger">{{ $message }}</p> @enderror
+                                                <div>
+                                                    <label class="form-label">Banner Alt Text</label>
+                                                    <input type="text" name="banner_image_alt" placeholder="" class="form-control" value="{{old('banner_image_alt')}}">
+                                                    @error('banner_image_alt') 
+                                                        <p class="small text-danger">{{ $message }}</p> 
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 card">
+                                                <div class="card-header p-0 mb-3">Home <span class="text-danger">*</span></div>
+                                                <div class="card-body p-0">
+                                                    <div class="w-100 product__thumb">
+                                                        <label for="home"><img id="output" src="{{ asset('admin/images/placeholder-image.jpg') }}" /></label>
+                                                    </div>
+                                                    <input type="file" name="home_image" id="home" accept="image/*" onchange="loadHome(event)" class="d-none">
+                                                    <script>
+                                                        let loadHome = function(event) {
+                                                            let output = document.getElementById('output');
+                                                            output.src = URL.createObjectURL(event.target.files[0]);
+                                                            output.onload = function() {
+                                                                URL.revokeObjectURL(output.src) // free memory
+                                                            }
+                                                        };
+                                                    </script>
+                                                </div>
+                                                <small>Image Size: 389px X 562px</small>
+                                                @error('home_image') <p class="small text-danger">{{ $message }}</p> @enderror
+                                                <div>
+                                                    <label class="form-label">Home Alt Text</label>
+                                                    <input type="text" name="home_image_alt" placeholder="" class="form-control" value="{{old('home_image_alt')}}">
+                                                    @error('home_image_alt') 
+                                                        <p class="small text-danger">{{ $message }}</p> 
+                                                    @enderror
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

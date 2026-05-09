@@ -4,17 +4,20 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\SubscriptionMail;
 use App\Models\Category;
 use App\Models\Collection;
+use App\Models\CategoryParent;
 use App\Models\Product;
 use App\Models\Gallery;
 use App\Models\Banner;
+use App\Services\InstagramService;
 use Illuminate\Support\Facades\Validator;
 
 class FrontController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, InstagramService $instagramService)
     {
         // $category = Category::latest('id')->get();
         // $collections = Collection::latest('id')->get();
@@ -22,7 +25,99 @@ class FrontController extends Controller
         // $products = Product::latest('view_count', 'id')->limit(16)->get();
         $galleries = Gallery::latest('id')->get();
         $banner = Banner::where('status', 1)->orderBy('position')->get();
-        return view('front.welcome', compact('products', 'galleries', 'banner'));
+        // $accessoriesParent = DB::table('category_parents')
+        //     ->where('slug', 'accessories')
+        //     ->where('status', 1)
+        //     ->first();
+        $accessoriesParent = CategoryParent::where('slug', 'accessories')
+            ->where('status', 1)
+            ->first();
+        $accessoriesCategories = Category::where('parent', $accessoriesParent->id)
+            ->where('status', 1)
+            ->orderBy('position', 'asc')
+            ->get();
+        $winterSlug = 'winter-wear'; 
+        $winterproducts = Product::where('is_trending', 1)
+            ->where('status', 1)
+            ->whereHas('category.parentCatDetails', function ($query) use ($winterSlug) {
+                $query->where('slug', $winterSlug);
+            })
+            ->orderByDesc('view_count')
+            ->orderByDesc('id')
+            ->limit(10)
+            ->get();
+        $innerSlug = 'innerwear'; 
+        $innerproducts = Product::where('is_trending', 1)
+            ->where('status', 1)
+            ->whereHas('category.parentCatDetails', function ($query) use ($innerSlug) {
+                $query->where('slug', $innerSlug);
+            })
+            ->orderByDesc('view_count')
+            ->orderByDesc('id')
+            ->limit(10)
+            ->get();
+        $outerSlug = 'outerwear'; 
+        $outerproducts = Product::where('is_trending', 1)
+            ->where('status', 1)
+            ->whereHas('category.parentCatDetails', function ($query) use ($outerSlug) {
+                $query->where('slug', $outerSlug);
+            })
+            ->orderByDesc('view_count')
+            ->orderByDesc('id')
+            ->limit(10)
+            ->get();
+        $instagramPosts = $instagramService->latestPosts(6);
+        return view('front.welcome', compact('products', 'winterproducts','innerproducts','outerproducts','galleries', 'banner','accessoriesCategories', 'instagramPosts'));
+    }
+
+    public function homenew(Request $request, InstagramService $instagramService)
+    {
+        // $category = Category::latest('id')->get();
+        // $collections = Collection::latest('id')->get();
+        $products = Product::where('is_trending', 1)->latest('view_count', 'id')->where('status',1)->limit(14)->get();
+        // $products = Product::latest('view_count', 'id')->limit(16)->get();
+        $galleries = Gallery::latest('id')->get();
+        $banner = Banner::where('status', 1)->orderBy('position')->get();
+        $accessoriesParent = DB::table('category_parents')
+            ->where('slug', 'accessories')
+            ->where('status', 1)
+            ->first();
+        $accessoriesCategories = Category::where('parent', $accessoriesParent->id)
+            ->where('status', 1)
+            ->orderBy('position', 'asc')
+            ->get();
+        $winterSlug = 'winter-wear'; 
+        $winterproducts = Product::where('is_trending', 1)
+            ->where('status', 1)
+            ->whereHas('category.parentCatDetails', function ($query) use ($winterSlug) {
+                $query->where('slug', $winterSlug);
+            })
+            ->orderByDesc('view_count')
+            ->orderByDesc('id')
+            ->limit(10)
+            ->get();
+        $innerSlug = 'innerwear'; 
+        $innerproducts = Product::where('is_trending', 1)
+            ->where('status', 1)
+            ->whereHas('category.parentCatDetails', function ($query) use ($innerSlug) {
+                $query->where('slug', $innerSlug);
+            })
+            ->orderByDesc('view_count')
+            ->orderByDesc('id')
+            ->limit(10)
+            ->get();
+        $outerSlug = 'outerwear'; 
+        $outerproducts = Product::where('is_trending', 1)
+            ->where('status', 1)
+            ->whereHas('category.parentCatDetails', function ($query) use ($outerSlug) {
+                $query->where('slug', $outerSlug);
+            })
+            ->orderByDesc('view_count')
+            ->orderByDesc('id')
+            ->limit(10)
+            ->get();
+        $instagramPosts = $instagramService->latestPosts(6);
+        return view('front.welcomenew', compact('products', 'winterproducts','innerproducts','outerproducts','galleries', 'banner','accessoriesCategories', 'instagramPosts'));
     }
 
     public function mailSubscribe(Request $request)

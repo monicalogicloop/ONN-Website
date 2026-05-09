@@ -17,21 +17,25 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <p class="text-muted">Icon</p>
                             <img src="{{ asset($data->icon_path) }}" alt="" style="height: 50px">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <p class="text-muted">Sketch</p>
                             <img src="{{ asset($data->sketch_icon) }}" alt="" style="height: 50px">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <p class="text-muted">Thumbnail</p>
                             <img src="{{ asset($data->image_path) }}" alt="" style="height: 50px">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <p class="text-muted">Banner</p>
                             <img src="{{ asset($data->banner_image) }}" alt="" style="height: 50px">
+                        </div>
+                        <div class="col-md-2">
+                            <p class="text-muted">Home</p>
+                            <img src="{{ asset($data->home_image) }}" alt="" style="height: 50px">
                         </div>
                     </div>
                     <hr>
@@ -107,10 +111,41 @@
                             <input type="text" name="parent" placeholder="" class="form-control" value="{{ $data->parent }}">
                             @error('parent') <p class="small text-danger">{{ $message }}</p> @enderror
                         </div> --}}
+                         <div class="form-group mb-3">
+                            <label class="label-control">Slug </label>
+                            <textarea name="slug" class="form-control">{{$data->slug}}</textarea>
+                            @error('slug') <p class="small text-danger">{{ $slug }}</p> @enderror
+                        </div>
                         <div class="form-group mb-3">
                             <label class="label-control">Description </label>
                             <textarea name="description" class="form-control">{{$data->description}}</textarea>
                             @error('description') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="label-control">Meta Title </label>
+                            <textarea name="meta_title" class="form-control">{{$data->meta_title}}</textarea>
+                            @error('meta_title') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="label-control">Meta Description </label>
+                            <textarea name="meta_description" class="form-control">{{$data->meta_description}}</textarea>
+                            @error('meta_description') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="label-control">Schemas </label>
+                            <textarea name="schema" class="form-control">{{$data->schema}}</textarea>
+                            @error('schema') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="label-control">Footer Content </label>
+                            <textarea name="footer_content" class="form-control">{{$data->footer_content}}</textarea>
+                            @error('footer_content') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="label-control">FAQ (Accordion HTML) </label>
+                            <textarea name="faq" class="form-control" rows="8">{{$data->faq}}</textarea>
+                            <small class="text-muted">Use pairs of .faq_heading and .faq_content blocks.</small>
+                            @error('faq') <p class="small text-danger">{{ $message }}</p> @enderror
                         </div>
                         <div class="row">
                             <div class="col-md-6 card">
@@ -132,6 +167,13 @@
                                 </div>
                                 <small>Image Size: 230px X 282px</small>
                                 @error('icon_path') <p class="small text-danger">{{ $message }}</p> @enderror
+                                <div>
+                                    <label class="form-label">Icon Alt Text</label>
+                                    <input type="text" name="icon_alt" placeholder="" class="form-control" value="{{ $data->icon_alt }}">
+                                    @error('icon_alt') 
+                                        <p class="small text-danger">{{ $message }}</p> 
+                                    @enderror
+                                </div>
                             </div>
                             <div class="col-md-6 card">
                                 <div class="card-header p-0 mb-3">Sketch icon <span class="text-danger">*</span></div>
@@ -152,6 +194,13 @@
                                 </div>
                                 <small>Image Size: 100px X 100px</small>
                                 @error('sketch_icon') <p class="small text-danger">{{ $message }}</p> @enderror
+                                <div>
+                                    <label class="form-label">Sketch Alt Text</label>
+                                    <input type="text" name="sketch_icon_alt" placeholder="" class="form-control" value="{{ $data->sketch_icon_alt }}">
+                                    @error('sketch_icon_alt') 
+                                        <p class="small text-danger">{{ $message }}</p> 
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -174,6 +223,13 @@
                                 </div>
                                 <small>Image Size: 512px X 512px</small>
                                 @error('image_path') <p class="small text-danger">{{ $message }}</p> @enderror
+                                <div>
+                                    <label class="form-label">Image Alt Text</label>
+                                    <input type="text" name="image_alt" placeholder="" class="form-control" value="{{ $data->image_alt }}">
+                                    @error('image_alt') 
+                                        <p class="small text-danger">{{ $message }}</p> 
+                                    @enderror
+                                </div>
                             </div>
                             <div class="col-md-6 card">
                                 <div class="card-header p-0 mb-3">Banner Image <span class="text-danger">*</span></div>
@@ -194,6 +250,42 @@
                                 </div>
                                 <small>Image Size: 1920px X 1080px</small>
                                 @error('banner_image') <p class="small text-danger">{{ $message }}</p> @enderror
+                                <div>
+                                    <label class="form-label">Banner Alt Text</label>
+                                    <input type="text" name="banner_image_alt" placeholder="" class="form-control" value="{{ $data->banner_image_alt }}">
+                                    @error('banner_image_alt') 
+                                        <p class="small text-danger">{{ $message }}</p> 
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 card">
+                                <div class="card-header p-0 mb-3">Home <span class="text-danger">*</span></div>
+                                <div class="card-body p-0">
+                                    <div class="w-100 product__thumb">
+                                        <label for="home"><img id="output" src="{{ asset($data->home_image) }}" /></label>
+                                    </div>
+                                    <input type="file" name="home_image" id="home" accept="image/*" onchange="loadHome(event)" class="d-none">
+                                    <script>
+                                        var loadHome = function(event) {
+                                            var output = document.getElementById('output');
+                                            output.src = URL.createObjectURL(event.target.files[0]);
+                                            output.onload = function() {
+                                                URL.revokeObjectURL(output.src) // free memory
+                                            }
+                                        };
+                                    </script>
+                                </div>
+                                <small>Image Size: 389px X 562px</small>
+                                @error('home_image') <p class="small text-danger">{{ $message }}</p> @enderror
+                                <div>
+                                    <label class="form-label">Home Alt Text</label>
+                                    <input type="text" name="home_image_alt" placeholder="" class="form-control" value="{{ $data->home_image_alt }}">
+                                    @error('home_image_alt') 
+                                        <p class="small text-danger">{{ $message }}</p> 
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                         @if(request('mode') == 'edit')
