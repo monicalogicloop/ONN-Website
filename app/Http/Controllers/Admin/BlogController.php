@@ -28,6 +28,9 @@ class BlogController extends Controller
             'content'  => 'required|string',
             'image'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'position' => 'nullable|integer',
+            'meta_title'       => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
+            'schema'           => 'nullable|string',
         ]);
 
         $params = $request->except('_token');
@@ -62,6 +65,9 @@ class BlogController extends Controller
             'content'  => 'required|string',
             'image'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'position' => 'nullable|integer',
+            'meta_title'       => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
+            'schema'           => 'nullable|string',
         ]);
 
         $params = $request->except('_token');

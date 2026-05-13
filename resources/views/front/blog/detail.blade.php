@@ -2,6 +2,16 @@
 
 @section('page', 'FAQ')
 
+@section('meta')
+    <title>{{ $data->meta_title ?? $data->name }}</title>
+    <meta name="description" content="{{ $data->meta_description ?? '' }}">
+    @if($data->schema)
+        <script type="application/ld+json">
+            {!! $data->schema !!}
+        </script>
+    @endif
+@endsection
+
 @section('content')
 
 <style type="text/css">

@@ -27,6 +27,9 @@ class BlogRepository implements BlogInterface
         $blog->content  = $data['content'];
         $blog->position = $data['position'] ?? 0;
         $blog->status   = 1;
+        $blog->meta_title       = $data['meta_title'] ?? null;       
+        $blog->meta_description = $data['meta_description'] ?? null; 
+        $blog->schema           = $data['schema'] ?? null;           
         $blog->save();
 
         return $blog;
@@ -40,6 +43,9 @@ class BlogRepository implements BlogInterface
         $blog->image    = $data['image'] ?? $blog->image;
         $blog->content  = $data['content'];
         $blog->position = $data['position'] ?? 0;
+        $blog->meta_title       = $data['meta_title'] ?? null;       
+        $blog->meta_description = $data['meta_description'] ?? null; 
+        $blog->schema           = $data['schema'] ?? null;          
         $blog->save();
 
         return $blog;

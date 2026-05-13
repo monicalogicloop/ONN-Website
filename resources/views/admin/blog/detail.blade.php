@@ -49,6 +49,22 @@
                         </div>
 
                         <div class="form-group mb-3">
+                            <label class="label-control">Meta Title </label>
+                            <textarea name="meta_title" class="form-control">{{$data->meta_title}}</textarea>
+                            @error('meta_title') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="label-control">Meta Description </label>
+                            <textarea name="meta_description" class="form-control">{{$data->meta_description}}</textarea>
+                            @error('meta_description') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="label-control">Schemas </label>
+                            <textarea name="schema" class="form-control">{{$data->schema}}</textarea>
+                            @error('schema') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
                             <label class="label-control">Status</label>
                             <select name="status" class="form-control">
                                 <option value="1" {{ $data->status == 1 ? 'selected' : '' }}>Active</option>
