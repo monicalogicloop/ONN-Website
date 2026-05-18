@@ -95,7 +95,7 @@
     <script>
         $(window).on('load', function() {
             gtag("event", "purchase", {
-                transaction_id: "",
+                transaction_id: "{{$orderData->order_no}}",
                 value: {{(int) $orderData->final_amount}},
                 tax: {{(int) $orderData->tax_amount}},
                 shipping: {{(int) $orderData->shipping_charges}},

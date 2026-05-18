@@ -381,7 +381,16 @@
                     {{-- @forelse($productsData as $categoryProductKey => $categoryProductValue) --}}
                     @forelse($data->ProductDetails as $categoryProductKey => $categoryProductValue)
                     @php if($categoryProductValue->status == 0) {continue;} @endphp
-                    <a href="{{ route('front.product.detail', $categoryProductValue->slug) }}" class="product__single" data-events data-cat="tshirt">
+                    @php
+                        $ga4ItemPrice = count($categoryProductValue->colorSize) > 0
+                            ? min($categoryProductValue->colorSize->pluck('offer_price')->toArray())
+                            : $categoryProductValue->offer_price;
+                    @endphp
+                    <a href="{{ route('front.product.detail', $categoryProductValue->slug) }}" class="product__single" data-events data-cat="tshirt"
+                       data-ga4-id="{{ $categoryProductValue->style_no }}"
+                       data-ga4-name="{{ $categoryProductValue->name }}"
+                       data-ga4-price="{{ $ga4ItemPrice }}"
+                       data-ga4-index="{{ $categoryProductKey }}">
                         <figure>
                             <img src="{{asset($categoryProductValue->image)}}" alt="{{$categoryProductValue->image_alt}}" loading="lazy" decoding="async"/>
                         </figure>
@@ -467,6 +476,59 @@
 @endsection
 
 @section('script')
+<script>
+    // GA4 Enhanced Ecommerce — view_item_list
+    @php
+        $ga4ListItems = $data->ProductDetails->filter(fn($p) => $p->status != 0)->values();
+    @endphp
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({
+        event: 'view_item_list',
+        ecommerce: {
+            item_list_id: {!! json_encode($data->slug) !!},
+            item_list_name: {!! json_encode($data->name) !!},
+            items: [
+                @foreach($ga4ListItems as $ga4Idx => $ga4Product)
+                @php
+                    $ga4ListPrice = count($ga4Product->colorSize) > 0
+                        ? min($ga4Product->colorSize->pluck('offer_price')->toArray())
+                        : $ga4Product->offer_price;
+                @endphp
+                {
+                    item_id: {!! json_encode($ga4Product->style_no) !!},
+                    item_name: {!! json_encode($ga4Product->name) !!},
+                    item_brand: 'ONN',
+                    item_category: {!! json_encode($data->name) !!},
+                    price: {{ $ga4ListPrice }},
+                    index: {{ $ga4Idx }}
+                }{{ !$loop->last ? ',' : '' }}
+                @endforeach
+            ]
+        }
+    });
+
+    // GA4 Enhanced Ecommerce — select_item
+    $(document).on('click', '.product__single[data-ga4-id]', function() {
+        var $el = $(this);
+        window.dataLayer.push({ ecommerce: null });
+        window.dataLayer.push({
+            event: 'select_item',
+            ecommerce: {
+                item_list_id: {!! json_encode($data->slug) !!},
+                item_list_name: {!! json_encode($data->name) !!},
+                items: [{
+                    item_id: $el.data('ga4-id'),
+                    item_name: $el.data('ga4-name'),
+                    item_brand: 'ONN',
+                    item_category: {!! json_encode($data->name) !!},
+                    price: parseFloat($el.data('ga4-price')),
+                    index: parseInt($el.data('ga4-index'))
+                }]
+            }
+        });
+    });
+</script>
 <script>
     $(document).ready(function () {
         var $faqSection = $('.category-faq-section .cms_context');

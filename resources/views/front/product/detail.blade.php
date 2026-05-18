@@ -354,12 +354,12 @@ App\Models\Product::where('id', $data->id)->increment('view_count', 1, ['last_vi
                         }
 
                         if ($colorCode['color_fabric'] != null) {
-                            echo '<li onclick="sizeCheck('.$data->id.', '.$colorCode['id'].')" style="background-image: url('.asset($colorCode['color_fabric']).');background-size: cover;" class="'.$activeCLass.'" data-bs-toggle="tooltip" data-bs-placement="top" title="'.$colorNameToDislay.'"></li>';
+                            echo '<li onclick="sizeCheck('.$data->id.', '.$colorCode['id'].', this)" style="background-image: url('.asset($colorCode['color_fabric']).');background-size: cover;" class="'.$activeCLass.'" data-bs-toggle="tooltip" data-bs-placement="top" title="'.$colorNameToDislay.'"></li>';
                         } else {
                             if ($colorCode['id'] == 61) {
                                 echo '<li style="background: -webkit-linear-gradient(left,  rgba(219,2,2,1) 0%,rgba(219,2,2,1) 9%,rgba(219,2,2,1) 10%,rgba(254,191,1,1) 10%,rgba(254,191,1,1) 10%,rgba(254,191,1,1) 20%,rgba(1,52,170,1) 20%,rgba(1,52,170,1) 20%,rgba(1,52,170,1) 30%,rgba(15,0,13,1) 30%,rgba(15,0,13,1) 30%,rgba(15,0,13,1) 40%,rgba(239,77,2,1) 40%,rgba(239,77,2,1) 40%,rgba(239,77,2,1) 50%,rgba(254,191,1,1) 50%,rgba(137,137,137,1) 50%,rgba(137,137,137,1) 60%,rgba(254,191,1,1) 60%,rgba(254,191,1,1) 60%,rgba(254,191,1,1) 70%,rgba(189,232,2,1) 70%,rgba(189,232,2,1) 80%,rgba(209,2,160,1) 80%,rgba(209,2,160,1) 90%,rgba(48,45,0,1) 90%); " data-bs-toggle="tooltip" data-bs-placement="top" title="'.$colorNameToDislay.'"></li>';
                             } else {
-                                echo '<li onclick="sizeCheck('.$data->id.', '.$colorCode['id'].')" style="background-color: '.$colorCode['code'].'" class="'.$activeCLass.'" data-bs-toggle="tooltip" data-bs-placement="top" title="'.$colorNameToDislay.'"></li>';
+                                echo '<li onclick="sizeCheck('.$data->id.', '.$colorCode['id'].', this)" style="background-color: '.$colorCode['code'].'" class="'.$activeCLass.'" data-bs-toggle="tooltip" data-bs-placement="top" title="'.$colorNameToDislay.'"></li>';
                             }
                         }
 					}
@@ -645,9 +645,35 @@ App\Models\Product::where('id', $data->id)->increment('view_count', 1, ['last_vi
 
 @section('script')
 <script>
-    // $('.product__color li').eq(0).addClass('active');
+    // GA4 Enhanced Ecommerce — view_item
+    @php
+        $ga4MinPrice = count($data->colorSize) > 0
+            ? min($data->colorSize->pluck('offer_price')->toArray())
+            : $data->offer_price;
+    @endphp
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({
+        event: 'view_item',
+        ecommerce: {
+            currency: 'INR',
+            value: {{ $ga4MinPrice }},
+            items: [{
+                item_id: {!! json_encode($data->style_no) !!},
+                item_name: {!! json_encode($data->name) !!},
+                item_brand: 'ONN',
+                item_category: {!! json_encode($data->category->name) !!},
+                price: {{ $ga4MinPrice }},
+                quantity: 1
+            }]
+        }
+    });
 
-    function sizeCheck(productId, colorId) {
+    var _ga4SelectedColor = '';
+    var _ga4SelectedPrice = {{ $ga4MinPrice }};
+
+    function sizeCheck(productId, colorId, el) {
+        if (el) _ga4SelectedColor = el.getAttribute('title') || '';
         $.ajax({
             url : '{{route("front.product.size")}}',
             method : 'POST',
@@ -755,7 +781,7 @@ App\Models\Product::where('id', $data->id)->increment('view_count', 1, ['last_vi
         $('#addToCart__btn').removeClass('missingVariationSelection');
         var variationId = $(this).attr('data-id');
         $('input[name="product_variation_id"]').val(variationId);
-        // console.log(variationId);
+        _ga4SelectedPrice = parseFloat($(this).attr('data-price')) || _ga4SelectedPrice;
     });
 
     /* $(document).on('click', '.missingVariationSelection', function(){
@@ -815,24 +841,29 @@ App\Models\Product::where('id', $data->id)->increment('view_count', 1, ['last_vi
 				$('#addToCart__btn').addClass('missingVariationSelection').text('Adding to Cart');
 			},
 			success: function(result) {
-				// const Toast = Swal.mixin({
-				// 	toast: true,
-				// 	position: 'top-end',
-				// 	showConfirmButton: false,
-				// 	timer: 2000,
-				// 	// timerProgressBar: true,
-				// 	didOpen: (toast) => {
-				// 		toast.addEventListener('mouseenter', Swal.stopTimer)
-				// 		toast.addEventListener('mouseleave', Swal.resumeTimer)
-				// 	}
-				// })
 				if (result.status == 200) {
                     toastFire('success', result.message);
-					// Toast.fire({
-					//   icon: 'success',
-					//   title: result.message
-					// })
 					$('#cart-count').text(result.response).removeClass('d-none');
+
+                    // GA4 Enhanced Ecommerce — add_to_cart
+                    var _ga4Qty = parseInt($('.counter').val()) || 1;
+                    window.dataLayer.push({ ecommerce: null });
+                    window.dataLayer.push({
+                        event: 'add_to_cart',
+                        ecommerce: {
+                            currency: 'INR',
+                            value: _ga4SelectedPrice * _ga4Qty,
+                            items: [{
+                                item_id: {!! json_encode($data->style_no) !!},
+                                item_name: {!! json_encode($data->name) !!},
+                                item_brand: 'ONN',
+                                item_category: {!! json_encode($data->category->name) !!},
+                                item_variant: _ga4SelectedColor,
+                                price: _ga4SelectedPrice,
+                                quantity: _ga4Qty
+                            }]
+                        }
+                    });
 				} else {
                     toastFire('error', result.message);
 					// Toast.fire({

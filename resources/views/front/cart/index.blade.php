@@ -499,6 +499,89 @@ section.cart-header {
 
 @section('script')
     <script>
+        // GA4 Enhanced Ecommerce — view_cart
+        @if(count($data) > 0)
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ ecommerce: null });
+        window.dataLayer.push({
+            event: 'view_cart',
+            ecommerce: {
+                currency: 'INR',
+                value: {{ $grandTotal - $buy_one_get_one_disount_price }},
+                items: [
+                    @foreach($data as $ga4CartKey => $ga4CartItem)
+                    {
+                        item_id: {!! json_encode($ga4CartItem->product_style_no) !!},
+                        item_name: {!! json_encode($ga4CartItem->product_name) !!},
+                        item_brand: 'ONN',
+                        item_category: {!! json_encode(optional(optional($ga4CartItem->productDetails)->category)->name ?? '') !!},
+                        item_variant: {!! json_encode(optional(optional($ga4CartItem->cartVariationDetails)->colorDetails)->name ?? '') !!},
+                        price: {{ $ga4CartItem->offer_price }},
+                        quantity: {{ $ga4CartItem->qty }},
+                        index: {{ $ga4CartKey }}
+                    }{{ !$loop->last ? ',' : '' }}
+                    @endforeach
+                ]
+            }
+        });
+
+        // GA4 Enhanced Ecommerce — begin_checkout
+        $('.checkout-btn').on('click', function() {
+            window.dataLayer.push({ ecommerce: null });
+            window.dataLayer.push({
+                event: 'begin_checkout',
+                ecommerce: {
+                    currency: 'INR',
+                    value: {{ $grandTotal - $buy_one_get_one_disount_price }},
+                    coupon: {!! json_encode(!empty($data[0]->coupon_code_id) ? $data[0]->couponDetails->coupon_code : '') !!},
+                    items: [
+                        @foreach($data as $ga4CartKey => $ga4CartItem)
+                        {
+                            item_id: {!! json_encode($ga4CartItem->product_style_no) !!},
+                            item_name: {!! json_encode($ga4CartItem->product_name) !!},
+                            item_brand: 'ONN',
+                            item_category: {!! json_encode(optional(optional($ga4CartItem->productDetails)->category)->name ?? '') !!},
+                            item_variant: {!! json_encode(optional(optional($ga4CartItem->cartVariationDetails)->colorDetails)->name ?? '') !!},
+                            price: {{ $ga4CartItem->offer_price }},
+                            quantity: {{ $ga4CartItem->qty }},
+                            index: {{ $ga4CartKey }}
+                        }{{ !$loop->last ? ',' : '' }}
+                        @endforeach
+                    ]
+                }
+            });
+        });
+
+        // GA4 Enhanced Ecommerce — remove_from_cart
+        $(document).on('click', '.cart-item.item-remove a', function(e) {
+            e.preventDefault();
+            var href = $(this).attr('href');
+            var $row = $(this).closest('.cart-row');
+            var itemName = $row.find('.item-title h4').text().trim();
+            var itemStyleNo = $row.find('.item-title h6').text().replace('Style #', '').trim();
+            var itemPrice = parseFloat($row.find('.item-price h4').first().text().replace('₹', '').trim());
+            var itemQty = parseInt($row.find('.counter').val()) || 1;
+            var itemColor = $row.find('.item-color h4').text().trim();
+            window.dataLayer.push({ ecommerce: null });
+            window.dataLayer.push({
+                event: 'remove_from_cart',
+                ecommerce: {
+                    currency: 'INR',
+                    value: itemPrice * itemQty,
+                    items: [{
+                        item_id: itemStyleNo,
+                        item_name: itemName,
+                        item_brand: 'ONN',
+                        item_variant: itemColor,
+                        price: itemPrice,
+                        quantity: itemQty
+                    }]
+                }
+            });
+            setTimeout(function() { window.location.href = href; }, 150);
+        });
+        @endif
+
         // cart page coupon
         $('#applyCouponBtn').on('click', (e) => {
             e.preventDefault()

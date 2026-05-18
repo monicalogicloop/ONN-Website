@@ -240,7 +240,7 @@ header .main-nav ul li:nth-child(2) .sub-menu.mega-menu > ul > li{
     right: 0;
     height: 10px;
     background: linear-gradient(to bottom, transparent, #fff); /* match your bg color */
-} */
+/* } */ */
 
 .footer-content.expanded {
     max-height: none;
