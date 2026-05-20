@@ -92,54 +92,47 @@
 @endsection
 
 @section('script')
-    <script>
-        $(window).on('load', function() {
-            gtag("event", "purchase", {
-                transaction_id: "{{$orderData->order_no}}",
-                value: {{(int) $orderData->final_amount}},
-                tax: {{(int) $orderData->tax_amount}},
-                shipping: {{(int) $orderData->shipping_charges}},
-                currency: "INR",
-                coupon: "{{(!empty($couponData)) ? $couponData->coupon_code : ''}}",
-                items: [
-                    @foreach($orderProductsData as $item)
-                    {
-                        item_id: "{{$item->sku_code}}",
-                        item_name: "{{$item->product_name}}",
-                        coupon: "{{(!empty($couponData)) ? $couponData->coupon_code : ''}}",
-                        discount: {{$item->price - $item->offer_price}},
-                        index: 0,
-                        item_brand: "ONN",
-                        item_category: "{{$item->productDetails->category->name}}",
-                        item_variant: "{{$item->productVariationDetails->colorDetails->name}}",
-                        price: {{$item->offer_price}},
-                        quantity: {{$item->qty}}
-                    }@if(!$loop->last),@endif
-                    @endforeach
-                ]
-            });
-        });
-    </script>
-	   <script>
-	  window.dataLayer = window.dataLayer || [];
-	  window.dataLayer.push({
-		'event':'order_complete',
-		'order_id': '{{$orderData->order_no}}',
-		'order_value': {{(int) $orderData->final_amount}},
-		'order_currency': 'INR',
-		'enhanced_conversion_data': {
-		  "email": "{{$orderData->email}}",
-		  "phone_number": "{{$orderData->mobile}}",
-		  "first_name": "{{$orderData->fname}}",
-		  "last_name": "{{$orderData->lname}}",
-		  "home_address": {
-			"street": "{{$orderData->shipping_address}}",
-			"city": "{{$orderData->shipping_city}}",
-			"region": "{{$orderData->shipping_city}}",
-			"postal_code": "{{$orderData->shipping_pin}}",
-			"country": "{{$orderData->shipping_country}}"
-		  }
-		}
-	  });
-	</script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({
+        event: 'purchase',
+        ecommerce: {
+            transaction_id: {!! json_encode($orderData->order_no) !!},
+            value: {{(int) $orderData->final_amount}},
+            tax: {{(int) $orderData->tax_amount}},
+            shipping: {{(int) $orderData->shipping_charges}},
+            currency: 'INR',
+            coupon: {!! json_encode((!empty($couponData)) ? $couponData->coupon_code : '') !!},
+            items: [
+                @foreach($orderProductsData as $item)
+                {
+                    item_id: {!! json_encode($item->sku_code) !!},
+                    item_name: {!! json_encode($item->product_name) !!},
+                    coupon: {!! json_encode((!empty($couponData)) ? $couponData->coupon_code : '') !!},
+                    discount: {{$item->price - $item->offer_price}},
+                    item_brand: 'ONN',
+                    item_category: {!! json_encode($item->productDetails->category->name) !!},
+                    item_variant: {!! json_encode($item->productVariationDetails->colorDetails->name) !!},
+                    price: {{$item->offer_price}},
+                    quantity: {{$item->qty}}
+                }@if(!$loop->last),@endif
+                @endforeach
+            ]
+        },
+        enhanced_conversion_data: {
+            email: {!! json_encode($orderData->email) !!},
+            phone_number: {!! json_encode($orderData->mobile) !!},
+            first_name: {!! json_encode($orderData->fname) !!},
+            last_name: {!! json_encode($orderData->lname) !!},
+            home_address: {
+                street: {!! json_encode($orderData->shipping_address) !!},
+                city: {!! json_encode($orderData->shipping_city) !!},
+                region: {!! json_encode($orderData->shipping_city) !!},
+                postal_code: {!! json_encode($orderData->shipping_pin) !!},
+                country: {!! json_encode($orderData->shipping_country) !!}
+            }
+        }
+    });
+</script>
 @endsection

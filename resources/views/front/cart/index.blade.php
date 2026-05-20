@@ -213,7 +213,12 @@ section.cart-header {
                         <h4>&#8377;{{$cartValue->offer_price * $cartValue->qty}}</h4>
                     </div>
                     <div class="cart-item item-remove">
-                        <a href="{{route('front.cart.delete', $cartValue->id)}}"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg><!--<span>Remove</span>--></a>
+                        <a href="{{route('front.cart.delete', $cartValue->id)}}"
+                           data-item-id="{{ $cartValue->product_style_no }}"
+                           data-item-name="{{ $cartValue->product_name }}"
+                           data-item-price="{{ $cartValue->offer_price }}"
+                           data-item-qty="{{ $cartValue->qty }}"
+                           data-item-color="{{ optional(optional($cartValue->cartVariationDetails)->colorDetails)->name ?? '' }}"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg><!--<span>Remove</span>--></a>
                     </div>
                 </div>
 
@@ -526,7 +531,9 @@ section.cart-header {
         });
 
         // GA4 Enhanced Ecommerce — begin_checkout
-        $('.checkout-btn').on('click', function() {
+        $('.checkout-btn').on('click', function(e) {
+            e.preventDefault();
+            var form = $(this).closest('form');
             window.dataLayer.push({ ecommerce: null });
             window.dataLayer.push({
                 event: 'begin_checkout',
@@ -548,20 +555,19 @@ section.cart-header {
                         }{{ !$loop->last ? ',' : '' }}
                         @endforeach
                     ]
-                }
+                },
+                eventCallback: function() { form[0].submit(); },
+                eventTimeout: 500
             });
         });
 
         // GA4 Enhanced Ecommerce — remove_from_cart
-        $(document).on('click', '.cart-item.item-remove a', function(e) {
+        $(document).on('click', '.cart-item.item-remove a[data-item-id]', function(e) {
             e.preventDefault();
-            var href = $(this).attr('href');
-            var $row = $(this).closest('.cart-row');
-            var itemName = $row.find('.item-title h4').text().trim();
-            var itemStyleNo = $row.find('.item-title h6').text().replace('Style #', '').trim();
-            var itemPrice = parseFloat($row.find('.item-price h4').first().text().replace('₹', '').trim());
-            var itemQty = parseInt($row.find('.counter').val()) || 1;
-            var itemColor = $row.find('.item-color h4').text().trim();
+            var $a = $(this);
+            var href = $a.attr('href');
+            var itemPrice = parseFloat($a.data('item-price')) || 0;
+            var itemQty = parseInt($a.data('item-qty')) || 1;
             window.dataLayer.push({ ecommerce: null });
             window.dataLayer.push({
                 event: 'remove_from_cart',
@@ -569,16 +575,17 @@ section.cart-header {
                     currency: 'INR',
                     value: itemPrice * itemQty,
                     items: [{
-                        item_id: itemStyleNo,
-                        item_name: itemName,
+                        item_id: $a.data('item-id'),
+                        item_name: $a.data('item-name'),
                         item_brand: 'ONN',
-                        item_variant: itemColor,
+                        item_variant: $a.data('item-color') || '',
                         price: itemPrice,
                         quantity: itemQty
                     }]
-                }
+                },
+                eventCallback: function() { window.location.href = href; },
+                eventTimeout: 500
             });
-            setTimeout(function() { window.location.href = href; }, 150);
         });
         @endif
 
