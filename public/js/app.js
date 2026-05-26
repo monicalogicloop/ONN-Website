@@ -266,12 +266,12 @@ var tl = gsap.timeline({
     paused: true
 });
 
-//tl.add(gsap.to(".overlay", { y: "0", ease: Sine.easeInOut, duration: 0.5 }), 0);
+//tl.add(gsap.to(".overlay", { y: "0", ease: "sine.inOut", duration: 0.5 }), 0);
 tl.addLabel("menu__links", ">");
 tl.add(
     gsap.to(".overlay .overlay__right", {
         y: "0",
-        ease: Sine.easeInOut,
+        ease: "sine.inOut",
         duration: 0.5,
     }),
     "<+=0.1"
@@ -280,7 +280,7 @@ tl.addLabel("secondary-nav", ">");
 tl.add(
     gsap.to(".overlay .overlay__right .bottom", {
         y: "0",
-        ease: Sine.easeInOut,
+        ease: "sine.inOut",
         duration: 0.5,
     }),
     "<+=0.3"
@@ -291,7 +291,7 @@ tl.add(
     gsap.from(".overlay .menu__links > ul > li", {
         y: "30px",
         opacity: 0,
-        ease: Sine.easeInOut,
+        ease: "sine.inOut",
         duration: 0.3,
         stagger: 0.1,
     }),
@@ -301,7 +301,7 @@ tl.add(
     gsap.from(".overlay .social-menu > ul > li", {
         y: "30px",
         opacity: 0,
-        ease: Sine.easeInOut,
+        ease: "sine.inOut",
         duration: 0.3,
         stagger: 0.1,
     }),
@@ -311,7 +311,7 @@ tl.add(
     gsap.from(".overlay .menu__links .button", {
         y: "30px",
         opacity: 0,
-        ease: Sine.easeInOut,
+        ease: "sine.inOut",
         duration: 0.3,
     }),
     ">-=0.3"
@@ -320,7 +320,7 @@ tl.add(
 tl.add(
     gsap.to(".overlay .overlay__close", {
         opacity: 1,
-        ease: Sine.easeInOut,
+        ease: "sine.inOut",
         duration: 0,
     }),
     "secondary-nav-=0"
@@ -329,7 +329,7 @@ tl.add(
     gsap.from(".overlay .top h2, .overlay .top h2 address", {
         y: "30px",
         opacity: 0,
-        ease: Sine.easeInOut,
+        ease: "sine.inOut",
         duration: 0.3,
         stagger: 0.1,
     }),
@@ -340,7 +340,7 @@ tl.add(
     gsap.from(".overlay .logo", {
         y: "30px",
         opacity: 0,
-        ease: Sine.easeInOut,
+        ease: "sine.inOut",
         duration: 0.3,
     }),
     "slogan-=0.2"
@@ -354,7 +354,7 @@ tl.add(
 //   },
 //   y: "300px",
 //   opacity: 1,
-//   ease: Sine.easeInOut,
+//   ease: "sine.inOut",
 //   duration: 1,
 //   stagger: 0.1,
 // });
@@ -1688,16 +1688,27 @@ jQuery('.account-item a').filter(function(){
 }).parents('li').addClass('active');
 
 
-jQuery('.overlay_menu li a').click(function() {
-    if (!jQuery(this).hasClass('active')) {
-        jQuery('.overlay_menu li a.active').removeClass('active');
-        jQuery(this).addClass('active');
-    } else {
-        jQuery(this).removeClass('active');
+function mobileMenuToggle(event, el) {
+    event.preventDefault();
+    var submenu = el.nextElementSibling;
+    if (!submenu) return;
+
+    var isOpen = submenu.style.display === 'block';
+
+    // Close all other open submenus
+    document.querySelectorAll('.overlay_submenu').forEach(function(s) {
+        s.style.display = 'none';
+    });
+    document.querySelectorAll('.overlay_menu > li > a').forEach(function(a) {
+        a.classList.remove('active');
+    });
+
+    // Open current if it was closed
+    if (!isOpen) {
+        submenu.style.display = 'block';
+        el.classList.add('active');
     }
-    jQuery(this).next().slideToggle();
-    jQuery('.overlay_submenu').not(jQuery(this).next()).slideUp();
-});
+}
 
 jQuery('.career_list li a').click(function(){
     if (!jQuery(this).hasClass('active')) {

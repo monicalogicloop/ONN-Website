@@ -653,17 +653,12 @@
                                                     <div class="col-sm-3 text-end">
                                                         <div>
                                                             <a href="javascript: void(0)" onclick="editSizeFunc('.$funcSizeNameDetail.', '.$productSizeVal->id.', '.$funcSizeDetail.', '.$funcPriceDetail.', '.$funcCodeDetail.')" class="badge bg-success">Edit</a>
-                                                            
+                                                            <a href="'.route('admin.product.variation.size.delete', $productSizeVal->id).'" onclick="return confirm(\'Are you sure you want to delete this variant?\')" class="badge bg-danger">Delete</a>
                                                         </div>
                                                         '.$lastSync.'
                                                     </div>
                                                 </div>
                                             </div>';
-
-                                            /*
-                                            delete option below edit (removed for now)
-                                            <a href='.route('admin.product.variation.size.delete', $productSizeVal->id).' onclick="'.$returnAlert.'" class="badge bg-danger">Delete</a>
-                                            */
                                         }
                                         $prodSizesDIsplay .= '';
                                     @endphp

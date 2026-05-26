@@ -1611,15 +1611,18 @@ jQuery('.account-item a').filter(function(){
 }).parents('li').addClass('active');
 
 
-jQuery('.overlay_menu li a').click(function() {
+jQuery('.overlay_menu > li > a').click(function() {
+    var submenu = jQuery(this).next('.overlay_submenu');
+    if (submenu.length === 0) return;
+
     if (!jQuery(this).hasClass('active')) {
-        jQuery('.overlay_menu li a.active').removeClass('active');
+        jQuery('.overlay_menu > li > a.active').removeClass('active');
         jQuery(this).addClass('active');
     } else {
         jQuery(this).removeClass('active');
     }
-    jQuery(this).next().slideToggle();
-    jQuery('.overlay_submenu').not(jQuery(this).next()).slideUp();
+    submenu.slideToggle();
+    jQuery('.overlay_submenu').not(submenu).slideUp();
 });
 
 jQuery('.career_list li a').click(function(){
