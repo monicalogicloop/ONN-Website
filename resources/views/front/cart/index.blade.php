@@ -134,12 +134,12 @@ section.cart-header {
                 $subTotal = $grandTotal = $couponCodeDiscount = $shippingCharges = $taxPercent = 0;
 
                 // shipping charge fetch
-                $shippingChargeJSON = json_decode($settings[22]->content);
-                $minOrderAmount = $shippingChargeJSON->min_order;
-                $shippingCharge = $shippingChargeJSON->shipping_charge;
-			    $empshippingChargeJSON = json_decode($settings[24]->content);
-                $minEmpOrderAmount = $empshippingChargeJSON->min_order ??'';
-                $empshippingCharge = $empshippingChargeJSON->shipping_charge ??'';
+                $shippingChargeJSON = isset($settings[22]) ? json_decode($settings[22]->content) : null;
+                $minOrderAmount = $shippingChargeJSON->min_order ?? 0;
+                $shippingCharge = $shippingChargeJSON->shipping_charge ?? 0;
+                $empshippingChargeJSON = isset($settings[24]) ? json_decode($settings[24]->content) : null;
+                $minEmpOrderAmount = $empshippingChargeJSON->min_order ?? '';
+                $empshippingCharge = $empshippingChargeJSON->shipping_charge ?? '';
                 $buy_one_get_one_selected_product = [];
                 $totalQty = $data->sum('qty');
                 $currentDate = now()->format('Y-m-d');

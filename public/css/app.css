@@ -26482,10 +26482,24 @@ header .nav-toggle span:after {
 .product-details__content__holder .product__enquire .qty-box a {
   background: transparent;
   color: #141b4b;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  cursor: pointer;
 }
 
 .product-details__content__holder .product__enquire .qty-box a svg {
   stroke: #141b4b;
+  pointer-events: none;
 }
 
 .product-details__content__holder .product__enquire .qty-box a:hover {

@@ -54,6 +54,11 @@ App\Models\Product::where('id', $data->id)->increment('view_count', 1, ['last_vi
     border-color: #000000;
     color: #fff;
 }
+.product-details__content__holder .product__sizes li.active {
+    border-color: #c10909;
+    background-color: #c10909;
+    color: #fff;
+}
 .product-details__gallery__thumb {
     position: relative;
 }
@@ -399,11 +404,11 @@ App\Models\Product::where('id', $data->id)->increment('view_count', 1, ['last_vi
                     <div class="item-qty mr-1">
                         <!-- <div class="cart-text">Quantity</div> -->
                         <div class="qty-box">
-                            <a href="javascript: void(0)" class="decrement" type="button">
+                            <a href="javascript: void(0)" class="decrement" type="button" onclick="var c=this.parentElement.querySelector('.counter'),v=parseInt(c.value)||1;if(v>1)c.value=v-1;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                             </a>
                             <input class="counter" type="number" value="1" name="qty" readonly>
-                            <a href="javascript: void(0)" class="increment" type="button">
+                            <a href="javascript: void(0)" class="increment" type="button" onclick="var c=this.parentElement.querySelector('.counter'),v=parseInt(c.value)||1;c.value=v+1;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                             </a>
                         </div>
@@ -778,6 +783,8 @@ App\Models\Product::where('id', $data->id)->increment('view_count', 1, ['last_vi
 
     // get variation id & load into product_variation_id
     $(document).on('click', '#sizeContainer li', function(){
+        $('#sizeContainer li').removeClass('active');
+        $(this).addClass('active');
         $('#addToCart__btn').removeClass('missingVariationSelection');
         var variationId = $(this).attr('data-id');
         $('input[name="product_variation_id"]').val(variationId);

@@ -126,6 +126,11 @@
                             @error('description') <p class="small text-danger">{{ $message }}</p> @enderror
                         </div>
                         <div class="form-group mb-3">
+                            <label class="label-control">Position <small class="text-muted">(lower number = appears first in nav)</small></label>
+                            <input type="number" name="position" class="form-control" value="{{ $data->position }}" min="0">
+                            @error('position') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="form-group mb-3">
                             <label class="label-control">Meta Title </label>
                             <textarea name="meta_title" class="form-control">{{$data->meta_title}}</textarea>
                             @error('meta_title') <p class="small text-danger">{{ $message }}</p> @enderror

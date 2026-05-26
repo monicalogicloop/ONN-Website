@@ -123,6 +123,7 @@ class CollectionRepository implements CollectionInterface
 
         $modelDetails->name = $collection['name'];
         $modelDetails->description = $collection['description'];
+        $modelDetails->position = isset($newDetails['position']) ? (int) $collection['position'] : $modelDetails->position;
         $modelDetails->icon_alt = $collection['icon_alt'];
         $modelDetails->sketch_icon_alt = $collection['sketch_icon_alt'];
         $modelDetails->image_alt = $collection['image_alt'];

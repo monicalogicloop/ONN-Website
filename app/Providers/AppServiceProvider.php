@@ -71,7 +71,7 @@ class AppServiceProvider extends ServiceProvider
             // settings
             $settingsExists = Schema::hasTable('settings');
             if ($settingsExists) {
-                $settings = Settings::where('status', 1)->get();
+                $settings = Settings::where('status', 1)->get()->keyBy('id');
             }
 
             // cart count

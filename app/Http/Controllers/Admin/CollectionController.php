@@ -82,6 +82,9 @@ class CollectionController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
             'schema' => 'nullable|string',
+            'position' => 'nullable|integer|min:0|unique:collections,position,' . $id,
+        ], [
+            'position.unique' => 'This position number is already used by another collection. Please choose a different one.',
         ]);
 
         $params = $request->except('_token');

@@ -1488,17 +1488,17 @@ $(document).on('click', '.filter__button', function () {
     $(this).remove();
 });
 
-var value = 1
-
-$(".product__enquire .counter").val(value);
-$('.product__enquire .increment').on("click", function () {
-    value = parseInt(value + 1);
-    $(".product__enquire .counter").val(value);
+$(document).on('click', '.product__enquire .increment', function () {
+    var counter = $(this).closest('.qty-box').find('.counter');
+    var value = parseInt(counter.val()) || 1;
+    counter.val(value + 1);
 });
-$('.product__enquire .decrement').on("click", function () {
+
+$(document).on('click', '.product__enquire .decrement', function () {
+    var counter = $(this).closest('.qty-box').find('.counter');
+    var value = parseInt(counter.val()) || 1;
     if (value > 1) {
-        value = parseInt(value - 1);
-        $(".product__enquire .counter").val(value);
+        counter.val(value - 1);
     }
 });
 

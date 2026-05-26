@@ -60,13 +60,12 @@
                             $subTotal = $grandTotal = $couponCodeDiscount = $shippingCharges = $taxPercent = 0;
 
                             // shipping charge fetch
-                            $shippingChargeJSON = json_decode($settings[22]->content);
-                            $minOrderAmount = $shippingChargeJSON->min_order;
-                            $shippingCharge = $shippingChargeJSON->shipping_charge;
-						    $empshippingChargeJSON = json_decode($settings[24]->content);
-                            $minEmpOrderAmount = $empshippingChargeJSON->min_order??'';
-                           
-                            $empshippingCharge = $empshippingChargeJSON->shipping_charge??'';
+                            $shippingChargeJSON = isset($settings[22]) ? json_decode($settings[22]->content) : null;
+                            $minOrderAmount = $shippingChargeJSON->min_order ?? 0;
+                            $shippingCharge = $shippingChargeJSON->shipping_charge ?? 0;
+                            $empshippingChargeJSON = isset($settings[24]) ? json_decode($settings[24]->content) : null;
+                            $minEmpOrderAmount = $empshippingChargeJSON->min_order ?? '';
+                            $empshippingCharge = $empshippingChargeJSON->shipping_charge ?? '';
                             $buy_one_get_one_selected_product = [];
                             $totalQty = $cartData->sum('qty');
                             $buy_one_get_one_disount_price = 0;
@@ -626,21 +625,21 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="shipping_city" value="{{old('shipping_city')}}" placeholder="City *" readonly>
+                                        <input type="text" class="form-control" name="shipping_city" value="{{old('shipping_city')}}" placeholder="City *">
                                         <label class="floating-label">City *</label>
                                     </div>
                                     @error('shipping_city')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="shipping_state" value="{{old('shipping_state')}}" placeholder="State *" readonly>
+                                        <input type="text" class="form-control" name="shipping_state" value="{{old('shipping_state')}}" placeholder="State *">
                                         <label class="floating-label">State *</label>
                                     </div>
                                     @error('shipping_state')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="shipping_country" value="{{old('shipping_country')}}" placeholder="Country/Region *" readonly>
+                                        <input type="text" class="form-control" name="shipping_country" value="{{old('shipping_country')}}" placeholder="Country/Region *">
                                         <label class="floating-label">Country/Region *</label>
                                     </div>
                                     @error('shipping_country')<p class="small text-danger mb-0">{{$message}}</p>@enderror
@@ -788,21 +787,21 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="shipping_city" value="{{old('shipping_city')}}" placeholder="City *" readonly>
+                                        <input type="text" class="form-control" name="shipping_city" value="{{old('shipping_city')}}" placeholder="City *">
                                         <label class="floating-label">City *</label>
                                     </div>
                                     @error('shipping_city')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="shipping_state" value="{{old('shipping_state')}}" placeholder="State *" readonly>
+                                        <input type="text" class="form-control" name="shipping_state" value="{{old('shipping_state')}}" placeholder="State *">
                                         <label class="floating-label">State *</label>
                                     </div>
                                     @error('shipping_state')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="shipping_country" value="{{old('shipping_country')}}" placeholder="Country/Region *" readonly>
+                                        <input type="text" class="form-control" name="shipping_country" value="{{old('shipping_country')}}" placeholder="Country/Region *">
                                         <label class="floating-label">Country/Region *</label>
                                     </div>
                                     @error('shipping_country')<p class="small text-danger mb-0">{{$message}}</p>@enderror
@@ -881,14 +880,14 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="billing_state" value="{{old('billing_state')}}" placeholder="State *" readonly>
+                                <input type="text" class="form-control" name="billing_state" value="{{old('billing_state')}}" placeholder="State *">
                                 <label class="floating-label">State *</label>
                             </div>
                             @error('billing_state')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="billing_country" value="{{old('billing_country')}}" placeholder="Country/Region *" readonly>
+                                <input type="text" class="form-control" name="billing_country" value="{{old('billing_country')}}" placeholder="Country/Region *">
                                 <label class="floating-label">Country/Region *</label>
                             </div>
                             @error('billing_country')<p class="small text-danger mb-0">{{$message}}</p>@enderror
@@ -983,21 +982,21 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="shipping_city" value="{{old('shipping_city')}}" placeholder="City *" readonly>
+                                <input type="text" class="form-control" name="shipping_city" value="{{old('shipping_city')}}" placeholder="City *">
                                 <label class="floating-label">City *</label>
                             </div>
                             @error('shipping_city')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="shipping_state" value="{{old('shipping_state')}}" placeholder="State *" readonly>
+                                <input type="text" class="form-control" name="shipping_state" value="{{old('shipping_state')}}" placeholder="State *">
                                 <label class="floating-label">State *</label>
                             </div>
                             @error('shipping_state')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="shipping_country" value="{{old('shipping_country')}}" placeholder="Country/Region *" readonly>
+                                <input type="text" class="form-control" name="shipping_country" value="{{old('shipping_country')}}" placeholder="Country/Region *">
                                 <label class="floating-label">Country/Region *</label>
                             </div>
                             @error('shipping_country')<p class="small text-danger mb-0">{{$message}}</p>@enderror
