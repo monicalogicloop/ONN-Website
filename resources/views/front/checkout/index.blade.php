@@ -60,7 +60,7 @@
                             $subTotal = $grandTotal = $couponCodeDiscount = $shippingCharges = $taxPercent = 0;
 
                             // shipping charge fetch
-                            $shippingChargeJSON = isset($settings[22]) ? json_decode($settings[22]->content) : null;
+                            $shippingChargeJSON = isset($settings[23]) ? json_decode($settings[23]->content) : null;
                             $minOrderAmount = $shippingChargeJSON->min_order ?? 0;
                             $shippingCharge = $shippingChargeJSON->shipping_charge ?? 0;
                             $empshippingChargeJSON = isset($settings[24]) ? json_decode($settings[24]->content) : null;
@@ -526,34 +526,21 @@
                                     </div>
                                     @error('billing_landmark')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group" id="loadCities">
-                                        <select class="form-control readonly_select" name="billing_city" style="color: #97938f;font-weight: 500;" readonly>
-                                            @if (old('billing_city'))
-                                                <option value="{{old('billing_city')}}">{{old('billing_city')}}</option>
-                                            @else
-                                                <option selected disabled>City *</option>
-                                            @endif
-                                        </select>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="billing_city" value="{{old('billing_city')}}" placeholder="City *">
                                         <label class="floating-label">City *</label>
-                                    
                                     </div>
                                     @error('billing_city')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="billing_state" value="{{old('billing_state')}}" placeholder="State *" readonly>
+                                        <input type="text" class="form-control" name="billing_state" value="{{old('billing_state')}}" placeholder="State *">
                                         <label class="floating-label">State *</label>
                                     </div>
                                     @error('billing_state')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" name="billing_country" value="{{old('billing_country')}}" placeholder="Country/Region *" readonly>
-                                        <label class="floating-label">Country/Region *</label>
-                                    </div>
-                                    @error('billing_country')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                                </div>
+                                <input type="hidden" name="billing_country" value="India">
                             </div>
     
                             <h4 class="cart-heading mt-4">Shipping address</h4>
@@ -623,27 +610,21 @@
                                     </div>
                                     @error('shipping_landmark')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <input type="text" class="form-control" name="shipping_city" value="{{old('shipping_city')}}" placeholder="City *">
                                         <label class="floating-label">City *</label>
                                     </div>
                                     @error('shipping_city')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <input type="text" class="form-control" name="shipping_state" value="{{old('shipping_state')}}" placeholder="State *">
                                         <label class="floating-label">State *</label>
                                     </div>
                                     @error('shipping_state')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" name="shipping_country" value="{{old('shipping_country')}}" placeholder="Country/Region *">
-                                        <label class="floating-label">Country/Region *</label>
-                                    </div>
-                                    @error('shipping_country')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                                </div>
+                                <input type="hidden" name="shipping_country" value="India">
                             </div>
                         </div>
                         @else
@@ -688,34 +669,21 @@
                                     </div>
                                     @error('billing_landmark')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group" id="loadCities">
-                                        <select class="form-control readonly_select" name="billing_city" style="color: #97938f;font-weight: 500;" readonly>
-                                            @if (old('billing_city'))
-                                                <option value="{{old('billing_city')}}">{{old('billing_city')}}</option>
-                                            @else
-                                                <option selected disabled>City *</option>
-                                            @endif
-                                        </select>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="billing_city" value="{{old('billing_city')}}" placeholder="City *">
                                         <label class="floating-label">City *</label>
-                                    
                                     </div>
                                     @error('billing_city')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="billing_state" value="{{old('billing_state')}}" placeholder="State *" readonly>
+                                        <input type="text" class="form-control" name="billing_state" value="{{old('billing_state')}}" placeholder="State *">
                                         <label class="floating-label">State *</label>
                                     </div>
                                     @error('billing_state')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" name="billing_country" value="{{old('billing_country')}}" placeholder="Country/Region *" readonly>
-                                        <label class="floating-label">Country/Region *</label>
-                                    </div>
-                                    @error('billing_country')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                                </div>
+                                <input type="hidden" name="billing_country" value="India">
                             </div>
     
                             <h4 class="cart-heading mt-4">Shipping address</h4>
@@ -785,27 +753,21 @@
                                     </div>
                                     @error('shipping_landmark')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <input type="text" class="form-control" name="shipping_city" value="{{old('shipping_city')}}" placeholder="City *">
                                         <label class="floating-label">City *</label>
                                     </div>
                                     @error('shipping_city')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <input type="text" class="form-control" name="shipping_state" value="{{old('shipping_state')}}" placeholder="State *">
                                         <label class="floating-label">State *</label>
                                     </div>
                                     @error('shipping_state')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" name="shipping_country" value="{{old('shipping_country')}}" placeholder="Country/Region *">
-                                        <label class="floating-label">Country/Region *</label>
-                                    </div>
-                                    @error('shipping_country')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                                </div>
+                                <input type="hidden" name="shipping_country" value="India">
                             </div>
                         </div>
                         @endif
@@ -863,40 +825,21 @@
                             </div>
                             @error('billing_landmark')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group" id="loadCities">
-                                <select class="form-control readonly_select" name="billing_city" style="color: #97938f;font-weight: 500;" readonly>
-                                    @if (old('billing_city'))
-                                        <option value="{{old('billing_city')}}">{{old('billing_city')}}</option>
-                                    @else
-                                        <option selected disabled>City *</option>
-                                    @endif
-                                </select>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="billing_city" value="{{old('billing_city')}}" placeholder="City *">
                                 <label class="floating-label">City *</label>
-                                {{-- <input type="text" class="form-control" name="billing_city" value="{{old('billing_city')}}" placeholder="City *" readonly>
-                                <label class="floating-label">City *</label> --}}
                             </div>
                             @error('billing_city')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <input type="text" class="form-control" name="billing_state" value="{{old('billing_state')}}" placeholder="State *">
                                 <label class="floating-label">State *</label>
                             </div>
                             @error('billing_state')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="billing_country" value="{{old('billing_country')}}" placeholder="Country/Region *">
-                                <label class="floating-label">Country/Region *</label>
-                            </div>
-                            @error('billing_country')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                            {{-- <div class="form-group">
-                                <input type="tel" class="form-control" name="billing_pin" value="{{old('billing_pin')}}" placeholder="Pin Code *" maxlength="6">
-                                <label class="floating-label">Pin Code *</label>
-                            </div>
-                            @error('billing_pin')<p class="small text-danger mb-0">{{$message}}</p>@enderror --}}
-                        </div>
+                        <input type="hidden" name="billing_country" value="India">
                     </div>
 
                     <h4 class="cart-heading mt-4">Shipping address</h4>
@@ -980,27 +923,21 @@
                             </div>
                             @error('shipping_landmark')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <input type="text" class="form-control" name="shipping_city" value="{{old('shipping_city')}}" placeholder="City *">
                                 <label class="floating-label">City *</label>
                             </div>
                             @error('shipping_city')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <input type="text" class="form-control" name="shipping_state" value="{{old('shipping_state')}}" placeholder="State *">
                                 <label class="floating-label">State *</label>
                             </div>
                             @error('shipping_state')<p class="small text-danger mb-0">{{$message}}</p>@enderror
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="shipping_country" value="{{old('shipping_country')}}" placeholder="Country/Region *">
-                                <label class="floating-label">Country/Region *</label>
-                            </div>
-                            @error('shipping_country')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                        </div>
+                        <input type="hidden" name="shipping_country" value="India">
                     </div>
 				@endif
                     <div class="row align-items-center justify-content-between">
@@ -1060,7 +997,7 @@
                             </div>
                             @endif
                         </div> --}}
-                        <div class="col-sm-12 mt-3 mt-sm-0">
+                        <div class="col-sm-12 mt-3">
                             <a href="{{route('front.cart.index')}}">Return to Cart</a>
                         </div>
                     </div>
@@ -1110,97 +1047,104 @@
         }
         */
 
-        // billing pinode detail fetch
-        $('input[name="billing_pin"]').on('keyup', ()=>{
-            var pincode = $('input[name="billing_pin"]').val();
-
-            if (pincode.length == 6) {
-                toastFire('info', 'Please wait...');
-                $('input[name="billing_pin"]').css('borderColor', '#4caf50').css('boxShadow', '0 0 0 0.2rem #4caf5057');
-
-                $.ajax({
-                    url: 'https://api.postalpincode.in/pincode/'+pincode,
-                    method: 'GET',
-                    success: function(result){
-                        if(result[0].Message != 'No records found') {
-                            // state & country added
-                            $('input[name="billing_state"]').val(result[0].PostOffice[0].State);
-                            $('input[name="billing_country"]').val(result[0].PostOffice[0].Country);
-
-                            // fetch city
-                            $.ajax({
-                                url: "{{url('/')}}/state/"+result[0].PostOffice[0].State+"/detail",
-                                type: 'GET',
-                                success: function(result) {
-                                    let content = `
-                                    <select class="form-control readonly_select active" name="billing_city" readonly>`;
-
-                                        $.each(result.data, (key, value) => {
-                                            content += `<option value="${value.city_name}">${value.city_name}</option>`;
-                                        });
-
-                                    content += `</select>
-                                    <label class="floating-label">City *</label>
-                                    `;
-
-                                    $('#loadCities').html(content);
-                                    $('.readonly_select.active').select2();
-                                    // console.log(result);
-                                }
-                            });
-
-                            // $('input[name="billing_city"]').val(result[0].PostOffice[0].District);
-                        } else {
-                            toastFire('warning', 'Enter valid pincode');
-                            $('input[name="billing_pin"]').css('borderColor', 'red').css('boxShadow', '0 0 0 0.2rem #dc34345c');
-                            $('input[name="billing_state"]').val('');
-                            $('input[name="billing_country"]').val('');
-                            $('input[name="billing_city"]').val('');
-                        }
-                    }
-                });
-                swal.close();
+        // PIN code border highlight only — no external API used
+        $('input[name="billing_pin"], input[name="shipping_pin"]').on('keyup', function() {
+            var val = $(this).val().trim();
+            if (val.length == 6 && /^\d{6}$/.test(val)) {
+                $(this).css('borderColor', '#4caf50').css('boxShadow', '0 0 0 0.2rem #4caf5057');
+            } else if (val.length > 0) {
+                $(this).css('borderColor', 'red').css('boxShadow', '0 0 0 0.2rem #dc34345c');
             } else {
-                $('input[name="billing_pin"]').css('borderColor', 'red').css('boxShadow', '0 0 0 0.2rem #dc34345c');
-				$('input[name="billing_state"]').val('');
-				$('input[name="billing_country"]').val('');
-                $('input[name="billing_city"]').val('');
+                $(this).css('borderColor', '').css('boxShadow', '');
             }
         });
 
-        // shipping pinode detail fetch
-        $('input[name="shipping_pin"]').on('keyup', ()=>{
-            var pincode = $('input[name="shipping_pin"]').val();
+        // ── Checkout form validation ──────────────────────────────────────────
+        $('form').on('submit', function(e) {
+            var errors = [];
 
-            if (pincode.length == 6) {
-                toastFire('info', 'Please wait...');
-                $('input[name="shipping_pin"]').css('borderColor', '#4caf50').css('boxShadow', '0 0 0 0.2rem #4caf5057');
+            // Only validate the first VISIBLE input matching selector
+            function getInput(name) {
+                return $('input[name="' + name + '"]:visible, select[name="' + name + '"]:visible').first();
+            }
 
-                $.ajax({
-                    url: 'https://api.postalpincode.in/pincode/'+pincode,
-                    method: 'GET',
-                    success: function(result){
-                        if(result[0].Message != 'No records found'){
-                            $('input[name="shipping_state"]').val(result[0].PostOffice[0].State);
-                            $('input[name="shipping_country"]').val(result[0].PostOffice[0].Country);
-                            $('input[name="shipping_city"]').val(result[0].PostOffice[0].District);
-                        } else {
-                            toastFire('warning', 'Enter valid pincode');
-                            $('input[name="shipping_pin"]').css('borderColor', 'red').css('boxShadow', '0 0 0 0.2rem #dc34345c');
-                            $('input[name="shipping_state"]').val('');
-                            $('input[name="shipping_country"]').val('');
-                            $('input[name="shipping_city"]').val('');
-                        }
-                    }
-                });
-                swal.close();
-            } else {
-                $('input[name="shipping_pin"]').css('borderColor', 'red').css('boxShadow', '0 0 0 0.2rem #dc34345c');
-				$('input[name="shipping_state"]').val('');
-				$('input[name="shipping_country"]').val('');
-                $('input[name="shipping_city"]').val('');
+            function markError(name, message) {
+                var input = getInput(name);
+                if (!input.length) return;
+                input.css('borderColor', 'red').css('boxShadow', '0 0 0 0.2rem #dc34345c');
+                var wrapper = input.closest('.form-group');
+                if (wrapper.length && !wrapper.next('.checkout-validation-msg').length) {
+                    wrapper.after('<p class="checkout-validation-msg small text-danger mb-1 mt-1">' + message + '</p>');
+                }
+                errors.push(message);
+            }
+
+            // Clear previous errors
+            $('.checkout-validation-msg').remove();
+            $('input, select').css('borderColor', '').css('boxShadow', '');
+
+            // Personal details
+            if (!getInput('fname').val().trim())
+                markError('fname', 'First name is required.');
+            if (!getInput('lname').val().trim())
+                markError('lname', 'Last name is required.');
+
+            var email = getInput('email').val().trim();
+            if (!email)
+                markError('email', 'Email is required.');
+            else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+                markError('email', 'Enter a valid email address.');
+
+            var mobile = getInput('mobile').val().trim();
+            if (!mobile)
+                markError('mobile', 'Mobile number is required.');
+            else if (!/^\d{10}$/.test(mobile))
+                markError('mobile', 'Enter a valid 10 digit mobile number.');
+
+            // Billing address (skip for HO / Dankuni)
+            var addressType = $('input[name="addressType"]:checked').val()
+                           || $('input[name="addressType"][type="hidden"]').val();
+
+            if (addressType !== 'ho' && addressType !== 'dankuni') {
+                var bPin = getInput('billing_pin').val().trim();
+                if (!bPin)
+                    markError('billing_pin', 'PIN code is required.');
+                else if (!/^\d{6}$/.test(bPin))
+                    markError('billing_pin', 'PIN code must be 6 digits.');
+
+                if (!getInput('billing_address').val().trim())
+                    markError('billing_address', 'Address is required.');
+                if (!getInput('billing_city').val().trim())
+                    markError('billing_city', 'City is required.');
+                if (!getInput('billing_state').val().trim())
+                    markError('billing_state', 'State is required.');
+            }
+
+            // Shipping address (only if not same as billing)
+            if (!$('input[name="shippingSameAsBilling"][type="checkbox"]').is(':checked')) {
+                var sPin = getInput('shipping_pin').val().trim();
+                if (!sPin)
+                    markError('shipping_pin', 'Shipping PIN code is required.');
+                else if (!/^\d{6}$/.test(sPin))
+                    markError('shipping_pin', 'Shipping PIN code must be 6 digits.');
+
+                if (!getInput('shipping_address').val().trim())
+                    markError('shipping_address', 'Shipping address is required.');
+                if (!getInput('shipping_city').val().trim())
+                    markError('shipping_city', 'Shipping city is required.');
+                if (!getInput('shipping_state').val().trim())
+                    markError('shipping_state', 'Shipping state is required.');
+            }
+
+            if (errors.length > 0) {
+                e.preventDefault();
+                var firstError = $('.checkout-validation-msg').first();
+                if (firstError.length) {
+                    $('html, body').animate({ scrollTop: firstError.offset().top - 120 }, 400);
+                }
             }
         });
+        // ─────────────────────────────────────────────────────────────────────
 
         // offer detail modal
         function offerDetailModal(id) {

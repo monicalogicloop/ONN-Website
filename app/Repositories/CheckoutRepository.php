@@ -92,18 +92,19 @@ class CheckoutRepository implements CheckoutInterface
         DB::beginTransaction();
 
         try {
-            $settings = Settings::all();
+            $settings = Settings::all()->keyBy('id');
 
             // shipping charge fetch
-            $shippingChargeJSON = json_decode($settings[22]->content);
-            $minOrderAmount = $shippingChargeJSON->min_order??'';
-            $shippingCharge = $shippingChargeJSON->shipping_charge??'';
-			$empshippingChargeJSON = json_decode($settings[24]->content);
-            $minEmpOrderAmount = $empshippingChargeJSON->min_order??'';
-            $empshippingCharge = $empshippingChargeJSON->shipping_charge??'';
+            $shippingChargeJSON = isset($settings[23]) ? json_decode($settings[23]->content) : null;
+            $minOrderAmount = $shippingChargeJSON->min_order ?? 0;
+            $shippingCharge = $shippingChargeJSON->shipping_charge ?? 0;
+            $empshippingChargeJSON = isset($settings[24]) ? json_decode($settings[24]->content) : null;
+            $minEmpOrderAmount = $empshippingChargeJSON->min_order ?? 0;
+            $empshippingCharge = $empshippingChargeJSON->shipping_charge ?? 0;
+
             // 1 order sequence
             $OrderChk = Order::select('order_sequence_int')->latest('id')->first();
-            if($OrderChk->order_sequence_int == 0) $orderSeq = 1;
+            if (!$OrderChk || $OrderChk->order_sequence_int == 0) $orderSeq = 1;
             else $orderSeq = (int) $OrderChk->order_sequence_int + 1;
 
             $ordNo = sprintf("%'.05d", $orderSeq);
@@ -735,13 +736,15 @@ class CheckoutRepository implements CheckoutInterface
             // dd($newEntry);
             return $newEntry->id;
         } catch (\Throwable $th) {
-            throw $th;
-            dd($th);
             DB::rollback();
+            \Log::error('Checkout create failed: ' . $th->getMessage(), [
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+            ]);
             return false;
         }
     }
-    
+
     
     protected function getGetOneByOneDiscountAmount($cartData)
     {
@@ -796,12 +799,12 @@ class CheckoutRepository implements CheckoutInterface
         DB::beginTransaction();
 
         try {
-            $settings = Settings::all();
+            $settings = Settings::all()->keyBy('id');
 
             // shipping charge fetch
-            $shippingChargeJSON = json_decode($settings[22]->content);
-            $minOrderAmount = $shippingChargeJSON->min_order??'';
-            $shippingCharge = $shippingChargeJSON->shipping_charge??'';
+            $shippingChargeJSON = isset($settings[23]) ? json_decode($settings[23]->content) : null;
+            $minOrderAmount = $shippingChargeJSON->min_order ?? 0;
+            $shippingCharge = $shippingChargeJSON->shipping_charge ?? 0;
 
             $newEntry = Order::findOrFail($order_id);
             if (isset($data['payment_method'])) {
@@ -934,9 +937,11 @@ class CheckoutRepository implements CheckoutInterface
             // dd($order_no);
             return $order_no;
         } catch (\Throwable $th) {
-            throw $th;
-            //dd($th);
             DB::rollback();
+            \Log::error('Checkout paymentCreate failed: ' . $th->getMessage(), [
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+            ]);
             return false;
         }
     }

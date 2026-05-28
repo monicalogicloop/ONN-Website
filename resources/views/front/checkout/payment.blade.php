@@ -60,7 +60,7 @@
                             $subTotal = $grandTotal = $couponCodeDiscount = $shippingCharges = $taxPercent = 0;
                             
                             // shipping charge fetch
-                            $shippingChargeJSON = json_decode($settings[22]->content);
+                            $shippingChargeJSON = json_decode($settings[23]->content);
                             $minOrderAmount = $shippingChargeJSON->min_order??'';
                             $shippingCharge = $shippingChargeJSON->shipping_charge??'';
                             
@@ -344,7 +344,7 @@
                             </div>
                             @endif
                         </div>
-                        <div class="col-sm-12 mt-3 mt-sm-0">
+                        <div class="col-sm-12 mt-3">
                             <a href="{{route('front.cart.index')}}">Return to Cart</a>
                         </div>
                     </div>

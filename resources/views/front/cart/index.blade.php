@@ -134,7 +134,7 @@ section.cart-header {
                 $subTotal = $grandTotal = $couponCodeDiscount = $shippingCharges = $taxPercent = 0;
 
                 // shipping charge fetch
-                $shippingChargeJSON = isset($settings[22]) ? json_decode($settings[22]->content) : null;
+                $shippingChargeJSON = isset($settings[23]) ? json_decode($settings[23]->content) : null;
                 $minOrderAmount = $shippingChargeJSON->min_order ?? 0;
                 $shippingCharge = $shippingChargeJSON->shipping_charge ?? 0;
                 $empshippingChargeJSON = isset($settings[24]) ? json_decode($settings[24]->content) : null;
