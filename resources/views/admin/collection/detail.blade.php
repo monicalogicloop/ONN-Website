@@ -121,6 +121,11 @@
                             @error('name') <p class="small text-danger">{{ $message }}</p> @enderror
                         </div>
                         <div class="form-group mb-3">
+                            <label class="label-control">Slug <span class="text-danger">*</span> <small class="text-muted">(used in URL — lowercase, hyphens only)</small></label>
+                            <input type="text" name="slug" class="form-control" value="{{ $data->slug }}">
+                            @error('slug') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="form-group mb-3">
                             <label class="label-control">Description </label>
                             <textarea name="description" class="form-control">{{$data->description}}</textarea>
                             @error('description') <p class="small text-danger">{{ $message }}</p> @enderror

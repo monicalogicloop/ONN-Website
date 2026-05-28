@@ -131,37 +131,15 @@ class CollectionRepository implements CollectionInterface
         $modelDetails->meta_title = $collection['meta_title'];
         $modelDetails->meta_description = $collection['meta_description'];
         $modelDetails->schema = $collection['schema'];
-        // $modelDetails->slug = $collection['slug'];
 
-        // if (in_array('image_path', $newDetails)) {
-        //     $image = $collection['image_path'];
-        //     $imageName = time().".".mt_rand().".".$image->getClientOriginalName();
-        //     $image->move($upload_path, $imageName);
-        //     $uploadedImage = $imageName;
-        //     $modelDetails->image_path = $upload_path.$uploadedImage;
-        // }
-
-        // generate slug
-        // $slug = Str::slug($collection['name'], '-');
-        // $slugExistCount = Collection::where('slug', $slug)->count();
-        // if ($slugExistCount > 0) $slug = $slug . '-' . ($slugExistCount + 1);
-        // $modelDetails->slug = $slug;
-
-        // regenerate slug only if name changed
-        if ($modelDetails->name !== $collection['name']) {
-
-            $baseSlug = Str::slug($collection['name'], '-');
+        // slug: sanitise input then ensure uniqueness (excluding self)
+        if (!empty($newDetails['slug'])) {
+            $baseSlug = Str::slug($collection['slug'], '-');
             $slug = $baseSlug;
             $counter = 1;
-
-            while (
-                Collection::where('slug', $slug)
-                    ->where('id', '!=', $collectionId)
-                    ->exists()
-            ) {
+            while (Collection::where('slug', $slug)->where('id', '!=', $id)->exists()) {
                 $slug = $baseSlug . '-' . $counter++;
             }
-
             $modelDetails->slug = $slug;
         }
 

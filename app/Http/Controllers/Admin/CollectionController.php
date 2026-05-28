@@ -69,21 +69,24 @@ class CollectionController extends Controller
         // dd($request->all());
 
         $request->validate([
-            "name" => "required|regex:/^[\pL\s\-]+$/u|max:255",
-            "description" => "nullable|string",
-            "icon_path" => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
-            "sketch_icon" => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
-            "image_path" => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
+            "name"         => "required|regex:/^[\pL\s\-]+$/u|max:255",
+            "slug"         => "required|string|max:255|unique:collections,slug," . $id,
+            "description"  => "nullable|string",
+            "icon_path"    => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
+            "sketch_icon"  => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
+            "image_path"   => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
             "banner_image" => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
-            "icon_alt" => "nullable|string",
-            "sketch_icon_alt" => "nullable|string",
-            "image_alt" => "nullable|string",
-            "banner_image_alt" => "nullable|string",
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string',
-            'schema' => 'nullable|string',
-            'position' => 'nullable|integer|min:0|unique:collections,position,' . $id,
+            "icon_alt"          => "nullable|string",
+            "sketch_icon_alt"   => "nullable|string",
+            "image_alt"         => "nullable|string",
+            "banner_image_alt"  => "nullable|string",
+            'meta_title'        => 'nullable|string|max:255',
+            'meta_description'  => 'nullable|string',
+            'schema'            => 'nullable|string',
+            'position'          => 'nullable|integer|min:0|unique:collections,position,' . $id,
         ], [
+            'slug.unique'     => 'This slug is already used by another collection.',
+            'slug.required'   => 'Slug is required.',
             'position.unique' => 'This position number is already used by another collection. Please choose a different one.',
         ]);
 
